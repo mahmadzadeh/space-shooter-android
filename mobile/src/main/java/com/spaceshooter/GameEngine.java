@@ -12,6 +12,7 @@ public class GameEngine {
 
     private UpdateThread mUpdateThread;
     private DrawThread mDrawThread;
+    public InputController inputController;
 
     private Runnable mDrawRunnable = new Runnable() {
         @Override
@@ -100,5 +101,9 @@ public class GameEngine {
 
     public boolean isPaused() {
         return mUpdateThread != null && mUpdateThread.isGamePaused();
+    }
+
+    public void setInputController(InputController controller) {
+        inputController = controller;
     }
 }

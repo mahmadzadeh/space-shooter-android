@@ -27,6 +27,8 @@ public class GameFragment extends SpaceShooterBaseFragment implements View.OnCli
         mGameEngine = new GameEngine(getActivity());
         mGameEngine.addGameObject(new ScoreGameObject(view, R.id.txt_score));
         view.findViewById(R.id.btn_play_pause).setOnClickListener(this);
+        mGameEngine.setInputController(new InputController());
+        mGameEngine.addGameObject(new Player(getView()));
         mGameEngine.startGame();
     }
 
