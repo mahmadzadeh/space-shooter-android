@@ -2,10 +2,12 @@ package com.spaceshooter;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 
 public class GameFragment extends SpaceShooterBaseFragment implements View.OnClickListener {
@@ -24,12 +26,27 @@ public class GameFragment extends SpaceShooterBaseFragment implements View.OnCli
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mGameEngine = new GameEngine(getActivity());
-        mGameEngine.addGameObject(new ScoreGameObject(view, R.id.txt_score));
         view.findViewById(R.id.btn_play_pause).setOnClickListener(this);
-        mGameEngine.setInputController(new InputController());
-        mGameEngine.addGameObject(new Player(getView()));
-        mGameEngine.startGame();
+
+        final ViewTreeObserver observer = view.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+
+                    @Override
+                    public void onGlobalLayout() {
+                        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                            observer.removeGlobalOnLayoutListener(this);
+                        }
+                        else {
+                            observer.removeOnGlobalLayoutListener(this);
+                        }
+                        mGameEngine = new GameEngine(getActivity());
+                        mGameEngine.setInputController(new InputController());
+                        mGameEngine.addGameObject(new Player(getView()));
+                        mGameEngine.startGame();
+                    }
+                }
+        );
     }
 
     @Override
