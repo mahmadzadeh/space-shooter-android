@@ -59,17 +59,19 @@ public class Bullet extends GameObject {
 
     @Override
     public void onDraw() {
-
+        mImageView.animate().translationX((int) mPositionX).translationY((int) mPositionY)
+                .setDuration(1)
+                .start();
     }
 
     @Override
     protected void onRemovedFromGameUiThread() {
-
+        mImageView.setVisibility(View.GONE);
     }
 
     @Override
     protected void onAddedToGameUiThread() {
-
+        mImageView.setVisibility(View.VISIBLE);
     }
 
     public void init(Player player, double positionX, double positionY) {

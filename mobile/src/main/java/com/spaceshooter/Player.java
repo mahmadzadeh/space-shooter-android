@@ -17,16 +17,12 @@ public class Player extends GameObject {
     private List<Bullet> bullets = new ArrayList<Bullet>();
     private double positionX;
     private double positionY;
-    private double speedFactor;
     private int maxX;
     private int maxY;
     private double mSpeedFactor;
     private View view;
 
-    private long mTimeSinceLastFire;
-
     private double pixelFactor;
-    private long TIME_BETWEEN_BULLETS = 250;
 
     public Player(View view) {
         this.view = view;
@@ -66,11 +62,11 @@ public class Player extends GameObject {
     @Override
     public void onUpdate(long elapsedTime, GameEngine gameEngine) {
         updatePosition(elapsedTime, gameEngine.inputController);
-        checkFiring(elapsedTime, gameEngine);
+        checkFiring(gameEngine);
     }
 
-    private void checkFiring(long elapsedTime, GameEngine gameEngine) {
-        if (gameEngine.inputController.mIsFiring && mTimeSinceLastFire < TIME_BETWEEN_BULLETS) {
+    private void checkFiring(GameEngine gameEngine) {
+        if (gameEngine.inputController.mIsFiring) {
             Bullet b = getBullet();
             if (b == null) {
                 return;
@@ -78,14 +74,11 @@ public class Player extends GameObject {
 
             b.init(this, positionX + ship.getWidth() / 2, positionY);
             gameEngine.addGameObject(b);
-            mTimeSinceLastFire = 0;
-        } else {
-            mTimeSinceLastFire += elapsedTime;
         }
     }
 
     private void updatePosition(long elapsedTime, InputController inputController) {
-        positionX += speedFactor * inputController.mHorizontalFactor * elapsedTime;
+        positionX += mSpeedFactor * inputController.mHorizontalFactor * elapsedTime;
 
         if (positionX < 0) {
             positionX = 0;
@@ -106,8 +99,9 @@ public class Player extends GameObject {
     @Override
     public void onDraw() {
         mTextView.setText("[" + (int) (positionX) + "," + (int) (positionY) + "]");
-        ship.setTranslationX(maxX / 2);
-        ship.setTranslationY(maxY / 2);
+        ship.animate().translationX((int) positionX).translationY((int) positionY)
+                .setDuration(1)
+                .start();
     }
 
     @Override

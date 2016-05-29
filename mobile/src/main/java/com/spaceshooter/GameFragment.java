@@ -24,7 +24,7 @@ public class GameFragment extends SpaceShooterBaseFragment implements View.OnCli
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         view.findViewById(R.id.btn_play_pause).setOnClickListener(this);
 
@@ -41,7 +41,7 @@ public class GameFragment extends SpaceShooterBaseFragment implements View.OnCli
                             observer.removeOnGlobalLayoutListener(this);
                         }
                         mGameEngine = new GameEngine(getActivity());
-                        mGameEngine.setInputController(new InputController());
+                        mGameEngine.setInputController(new BasicInputController(view));
                         mGameEngine.addGameObject(new Player(getView()));
                         mGameEngine.startGame();
                     }

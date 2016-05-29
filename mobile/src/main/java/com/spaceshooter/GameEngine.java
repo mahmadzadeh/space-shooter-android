@@ -9,6 +9,8 @@ import android.app.Activity;
 public class GameEngine {
 
     private List<GameObject> mGameObjects = new ArrayList<GameObject>();
+    private List<GameObject> mObjectsToAdd = new ArrayList<GameObject>();
+    private List<GameObject> mObjectsToRemove = new ArrayList<GameObject>();
 
     private UpdateThread mUpdateThread;
     private DrawThread mDrawThread;
@@ -17,9 +19,11 @@ public class GameEngine {
     private Runnable mDrawRunnable = new Runnable() {
         @Override
         public void run() {
-            int numGameObjects = mGameObjects.size();
-            for (int i = 0; i < numGameObjects; i++) {
-                mGameObjects.get(i).onDraw();
+            synchronized (mGameObjects) {
+                int numGameObjects = mGameObjects.size();
+                for (int i = 0; i < numGameObjects; i++) {
+                    mGameObjects.get(i).onDraw();
+                }
             }
         }
     };
@@ -77,17 +81,33 @@ public class GameEngine {
     }
 
     public void addGameObject(GameObject gameObject) {
-        mGameObjects.add(gameObject);
+        if (isRunning()){
+            mObjectsToAdd.add(gameObject);
+        }
+        else {
+            mGameObjects.add(gameObject);
+        }
+        mActivity.runOnUiThread(gameObject.onAddedRunnable);
     }
 
     public void removeGameObject(GameObject gameObject) {
-        mGameObjects.remove(gameObject);
+        mObjectsToRemove.add(gameObject);
+        mActivity.runOnUiThread(gameObject.onRemovedRunnable);
     }
 
     public void onUpdate(long elapsedMillis) {
+        //inputController.onPreUpdate();
         int numGameObjects = mGameObjects.size();
         for (int i=0; i<numGameObjects; i++) {
             mGameObjects.get(i).onUpdate(elapsedMillis, this);
+        }
+        synchronized (mGameObjects) {
+            while (!mObjectsToRemove.isEmpty()) {
+                mGameObjects.remove(mObjectsToRemove.remove(0));
+            }
+            while (!mObjectsToAdd.isEmpty()) {
+                mGameObjects.add(mObjectsToAdd.remove(0));
+            }
         }
     }
 
