@@ -1,5 +1,7 @@
 package com.spaceshooter;
 
+import android.graphics.Canvas;
+
 public abstract class GameObject {
 
     public final Runnable onAddedRunnable = new Runnable() {
@@ -19,11 +21,13 @@ public abstract class GameObject {
 
     public abstract void onUpdate(long elapsedTime, GameEngine gameEngine);
 
-    public abstract void onDraw();
+    public void onRemovedFromGameUiThread() {
 
-    protected abstract void onRemovedFromGameUiThread();
+    }
 
-    protected abstract void onAddedToGameUiThread();
+    public void onAddedToGameUiThread(){
 
+    }
 
+    public abstract void onDraw(Canvas canvas);
 }

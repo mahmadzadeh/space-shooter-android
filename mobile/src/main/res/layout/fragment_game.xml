@@ -9,12 +9,10 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     tools:context="com.spaceshooter.GameFragment">
 
-    <TextView
-        android:layout_gravity="top|left"
-        android:id="@+id/txt_score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+    <com.spaceshooter.SurfaceGameView
+        android:id="@+id/gameView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <Button
         android:layout_gravity="top|right"
@@ -22,5 +20,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/pause" />
-    <include layout="@layout/view_keypad" />
+    <!--<include layout="@layout/view_keypad" />-->
+    <include layout="@layout/view_vjoystick" />
 </FrameLayout>

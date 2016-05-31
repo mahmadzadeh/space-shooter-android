@@ -40,9 +40,10 @@ public class GameFragment extends SpaceShooterBaseFragment implements View.OnCli
                         else {
                             observer.removeOnGlobalLayoutListener(this);
                         }
-                        mGameEngine = new GameEngine(getActivity());
-                        mGameEngine.setInputController(new BasicInputController(view));
-                        mGameEngine.addGameObject(new Player(getView()));
+                        GameView gameView = (GameView) getView().findViewById(R.id.gameView);
+                        mGameEngine = new GameEngine(getActivity(), gameView);
+                        mGameEngine.setInputController(new VirtualJoystickInputController(view));
+                        mGameEngine.addGameObject(new Player(mGameEngine));
                         mGameEngine.startGame();
                     }
                 }

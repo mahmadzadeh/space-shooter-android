@@ -4,10 +4,13 @@ package com.spaceshooter;
 import java.util.ArrayList;
 import java.util.List;
 import android.app.Activity;
+import android.content.Context;
 
 
 public class GameEngine {
 
+    private final GameView mGameView;
+    public final double mPixelFactor;
     private List<GameObject> mGameObjects = new ArrayList<GameObject>();
     private List<GameObject> mObjectsToAdd = new ArrayList<GameObject>();
     private List<GameObject> mObjectsToRemove = new ArrayList<GameObject>();
@@ -15,23 +18,22 @@ public class GameEngine {
     private UpdateThread mUpdateThread;
     private DrawThread mDrawThread;
     public InputController inputController;
-
-    private Runnable mDrawRunnable = new Runnable() {
-        @Override
-        public void run() {
-            synchronized (mGameObjects) {
-                int numGameObjects = mGameObjects.size();
-                for (int i = 0; i < numGameObjects; i++) {
-                    mGameObjects.get(i).onDraw();
-                }
-            }
-        }
-    };
+    public final int mWidth;
+    public final int mHeight;
 
     private Activity mActivity;
 
-    public GameEngine (Activity a) {
+    public GameEngine (Activity a, GameView gameView)  {
         mActivity = a;
+        mGameView = gameView;
+        gameView.setGameObjects(mGameObjects);
+        mWidth = gameView.getWidth()
+                - gameView.getPaddingRight() - gameView.getPaddingRight();
+        mHeight = gameView.getHeight()
+                - gameView.getPaddingTop() - gameView.getPaddingBottom();
+
+        mPixelFactor = mHeight / 400d;
+
     }
 
     public void startGame() {
@@ -112,7 +114,7 @@ public class GameEngine {
     }
 
     public void onDraw() {
-        mActivity.runOnUiThread(mDrawRunnable);
+        mGameView.draw();
     }
 
     public boolean isRunning() {
@@ -125,5 +127,9 @@ public class GameEngine {
 
     public void setInputController(InputController controller) {
         inputController = controller;
+    }
+
+    public Context getContext() {
+        return mGameView.getContext();
     }
 }

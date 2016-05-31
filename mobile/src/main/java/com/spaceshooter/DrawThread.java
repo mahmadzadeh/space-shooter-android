@@ -1,7 +1,6 @@
 package com.spaceshooter;
 
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class DrawThread extends Thread {
 
@@ -10,34 +9,56 @@ public class DrawThread extends Thread {
 
     private final GameEngine mGameEngine;
     private Timer mTimer;
+    private boolean mGameIsRunning = true;
+    private boolean mPauseGame = false;
+    private java.lang.Object mLock = new Object();
 
     public DrawThread(GameEngine gameEngine) {
         mGameEngine = gameEngine;
     }
 
-    public void start() {
-        stopGame();
-        mTimer = new Timer();
-        mTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                mGameEngine.onDraw();
-            }
-        }, 0, TIME_BETWEEN_DRAWS);
-    }
-
     public void stopGame() {
-        if (mTimer != null) {
-            mTimer.cancel();
-            mTimer.purge();
-        }
+        mGameIsRunning = false;
     }
 
     public void pauseGame() {
-        stopGame();
+        mPauseGame = true;
     }
 
     public void resumeGame() {
-        start();
+        mPauseGame = false;
+    }
+
+    @Override
+    public void run() {
+        long elapsedMillis;
+        long currentTimeMillis;
+        long previousTimeMillis = System.currentTimeMillis();
+
+        while (mGameIsRunning) {
+            currentTimeMillis = System.currentTimeMillis();
+            elapsedMillis = currentTimeMillis - previousTimeMillis;
+            if (mPauseGame) {
+                while (mPauseGame) {
+                    try {
+                        synchronized (mLock) {
+                            mLock.wait();
+                        }
+                    } catch (InterruptedException e) {
+                        // We stay on the loop
+                    }
+                }
+                currentTimeMillis = System.currentTimeMillis();
+            }
+            if (elapsedMillis < 20) { // This is 50 fps
+                try {
+                    Thread.sleep(20 - elapsedMillis);
+                } catch (InterruptedException e) {
+                    // We just continue.
+                }
+            }
+            mGameEngine.onDraw();
+            previousTimeMillis = currentTimeMillis;
+        }
     }
 }

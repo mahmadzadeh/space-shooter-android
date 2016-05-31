@@ -1,5 +1,6 @@
 package com.spaceshooter;
 
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,46 +11,28 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player extends GameObject {
+public class Player extends Sprite {
     private static final int INITIAL_BULLET_POOL_AMOUNT = 6;
-    private final ImageView ship;
-    private final TextView mTextView;
     private List<Bullet> bullets = new ArrayList<Bullet>();
     private double positionX;
     private double positionY;
     private int maxX;
     private int maxY;
     private double mSpeedFactor;
-    private View view;
 
-    private double pixelFactor;
+    public Player(GameEngine gameEngine) {
+        super(gameEngine, R.drawable.ship);
+        mSpeedFactor = mPixelFactor * 100d / 1000d;
 
-    public Player(View view) {
-        this.view = view;
-        mTextView = (TextView) view.findViewById(R.id.txt_score);
-        pixelFactor = view.getHeight() / 400d;
-        maxX = view.getWidth() - view.getPaddingRight() - view.getPaddingRight();
-        maxY = view.getHeight() - view.getPaddingTop() - view.getPaddingBottom();
-        mSpeedFactor = pixelFactor * 100d / 1000d; // We want to move at 100px per second on a 400px tall screen
+        maxX = gameEngine.mWidth- mImageWidth;
+        maxY = gameEngine.mHeight - mImageHeight;
 
-        ship = new ImageView(view.getContext());
-        Drawable shipDrawable = view.getContext().getResources().getDrawable(R.drawable.ship);
-        ship.setLayoutParams(new ViewGroup.LayoutParams(
-                (int) (shipDrawable.getIntrinsicWidth() * pixelFactor),
-                (int) (shipDrawable.getIntrinsicHeight() * pixelFactor)));
-
-        ship.setImageDrawable(shipDrawable);
-        ((FrameLayout) view).addView(ship);
-
-        maxX -= (shipDrawable.getIntrinsicWidth() * pixelFactor);
-        maxY -= (shipDrawable.getIntrinsicHeight() * pixelFactor);
-
-        initBulletPool();
+        initBulletPool(gameEngine);
     }
 
-    private void initBulletPool() {
+    private void initBulletPool(GameEngine gameEngine) {
         for (int i = 0; i < INITIAL_BULLET_POOL_AMOUNT; i++) {
-            bullets.add(new Bullet(view, pixelFactor));
+            bullets.add(new Bullet(gameEngine));
         }
     }
 
@@ -72,7 +55,7 @@ public class Player extends GameObject {
                 return;
             }
 
-            b.init(this, positionX + ship.getWidth() / 2, positionY);
+            b.init(this, positionX + mImageWidth/2, positionY);
             gameEngine.addGameObject(b);
         }
     }
@@ -94,27 +77,7 @@ public class Player extends GameObject {
             positionY = maxY;
         }
     }
-
-
-    @Override
-    public void onDraw() {
-        mTextView.setText("[" + (int) (positionX) + "," + (int) (positionY) + "]");
-        ship.animate().translationX((int) positionX).translationY((int) positionY)
-                .setDuration(1)
-                .start();
-    }
-
-    @Override
-    protected void onRemovedFromGameUiThread() {
-
-    }
-
-    @Override
-    protected void onAddedToGameUiThread() {
-
-    }
-
-    private Bullet getBullet() {
+        private Bullet getBullet() {
         if (bullets.isEmpty()) {
             return null;
         }
