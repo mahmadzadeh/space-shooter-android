@@ -42,7 +42,6 @@ public class FPSCounter extends GameObject {
         }
     }
 
-
     @Override
     public void onDraw(Canvas canvas) {
         mPaint.setColor(Color.BLACK);
