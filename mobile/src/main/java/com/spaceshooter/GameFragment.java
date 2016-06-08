@@ -43,7 +43,7 @@ public class GameFragment extends SpaceShooterBaseFragment implements View.OnCli
                         GameView gameView = (GameView) getView().findViewById(R.id.gameView);
                         mGameEngine = new GameEngine(getActivity(), gameView);
                         mGameEngine.setInputController(new VirtualJoystickInputController(view));
-                        mGameEngine.addGameObject(new ParallaxBackground(mGameEngine, 20, R.drawable.seamless_space_0));
+                        mGameEngine.addGameObject(new ParallaxBackground(mGameEngine, 20, R.drawable.hubbleUDF));
                         mGameEngine.addGameObject(new GameController(mGameEngine));
                         mGameEngine.addGameObject(new Player(mGameEngine));
                         mGameEngine.addGameObject(new FPSCounter(mGameEngine));
