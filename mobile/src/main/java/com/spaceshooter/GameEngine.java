@@ -3,6 +3,8 @@ package com.spaceshooter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
 import android.app.Activity;
 import android.content.Context;
 
@@ -20,8 +22,8 @@ public class GameEngine {
     public InputController inputController;
     public final int mWidth;
     public final int mHeight;
-
     private Activity mActivity;
+    public Random mRandom = new Random();
 
     public GameEngine (Activity a, GameView gameView)  {
         mActivity = a;

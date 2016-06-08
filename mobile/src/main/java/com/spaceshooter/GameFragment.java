@@ -43,6 +43,8 @@ public class GameFragment extends SpaceShooterBaseFragment implements View.OnCli
                         GameView gameView = (GameView) getView().findViewById(R.id.gameView);
                         mGameEngine = new GameEngine(getActivity(), gameView);
                         mGameEngine.setInputController(new VirtualJoystickInputController(view));
+                        mGameEngine.addGameObject(new ParallaxBackground(mGameEngine, 20, R.drawable.seamless_space_0));
+                        mGameEngine.addGameObject(new GameController(mGameEngine));
                         mGameEngine.addGameObject(new Player(mGameEngine));
                         mGameEngine.addGameObject(new FPSCounter(mGameEngine));
                         mGameEngine.startGame();
@@ -123,20 +125,4 @@ public class GameFragment extends SpaceShooterBaseFragment implements View.OnCli
             button.setText(R.string.resume);
         }
     }
-
-//    private void startOrStop() {
-//        Button button = (Button) getView().findViewById(R.id.btn_start_stop);
-//        Button playPauseButton = (Button) getView().findViewById(R.id.btn_play_pause);
-//        if (mGameEngine.isRunning()) {
-//            mGameEngine.stopGame();
-//            button.setText(R.string.start);
-//            playPauseButton.setEnabled(false);
-//        }
-//        else {
-//            mGameEngine.startGame();
-//            button.setText(R.string.stop);
-//            playPauseButton.setEnabled(true);
-//            playPauseButton.setText(R.string.pause);
-//        }
-//    }
 }
