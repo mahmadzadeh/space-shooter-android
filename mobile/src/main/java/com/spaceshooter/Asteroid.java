@@ -22,8 +22,8 @@ public class Asteroid extends Sprite {
 
     @Override
     public void onUpdate(long elapsedMillis, GameEngine gameEngine) {
-        mPositionX += mSpeedX * elapsedMillis;
-        mPositionY += mSpeedY * elapsedMillis;
+        mX += mSpeedX * elapsedMillis;
+        mY += mSpeedY * elapsedMillis;
         mRotation += mRotationSpeed * elapsedMillis;
         if (mRotation > 360) {
             mRotation = 0;
@@ -32,7 +32,7 @@ public class Asteroid extends Sprite {
             mRotation = 360;
         }
         // Check of the sprite goes out of the screen and return it to the pool if so
-        if (mPositionY > gameEngine.mHeight) {
+        if (mY > gameEngine.mHeight) {
             // Return to the pool
             gameEngine.removeGameObject(this);
             mController.returnToPool(this);
@@ -45,10 +45,24 @@ public class Asteroid extends Sprite {
         mSpeedX = mSpeed * Math.sin(angle);
         mSpeedY = mSpeed * Math.cos(angle);
         // Asteroids initialize in the central 50% of the screen horizontally
-        mPositionX = gameEngine.mRandom.nextInt(gameEngine.mWidth/2)+gameEngine.mWidth/4;
+        mX = gameEngine.mRandom.nextInt(gameEngine.mWidth/2)+gameEngine.mWidth/4;
         // They initialize outside of the screen vertically
-        mPositionY = -mImageHeight;
+        mY = -mHeight;
         mRotationSpeed = angle*(180d / Math.PI)/250d; // They rotate 4 times their ange in a second.
         mRotation = gameEngine.mRandom.nextInt(360);
+    }
+
+    public void onCollision(GameEngine gameEngine, ScreenGameObject otherObject) {
+        if (otherObject instanceof Player) {
+            // Remove both from the game (and return them to their pools)
+            removeObject(gameEngine);
+            Player a = (Player) otherObject;
+            a.removeObject(gameEngine);
+        }
+    }
+
+    public void removeObject(GameEngine gameEngine) {
+        gameEngine.removeGameObject(this);
+        mController.returnToPool(this);
     }
 }

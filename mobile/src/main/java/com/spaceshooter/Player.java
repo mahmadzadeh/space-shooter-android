@@ -9,8 +9,6 @@ public class Player extends Sprite {
 
     private List<Bullet> bullets = new ArrayList<Bullet>();
 
-    private double positionX;
-    private double positionY;
     private int mMaxX;
     private int mMaxY;
     private double mSpeedFactor;
@@ -20,8 +18,8 @@ public class Player extends Sprite {
         super(gameEngine, R.drawable.ship);
         mSpeedFactor = mPixelFactor * 100d / 1000d;
 
-        mMaxX = gameEngine.mWidth - mImageWidth;
-        mMaxY = gameEngine.mHeight - mImageHeight;
+        mMaxX = gameEngine.mWidth - mWidth;
+        mMaxY = gameEngine.mHeight - mHeight;
 
         initBulletPool(gameEngine);
     }
@@ -34,8 +32,8 @@ public class Player extends Sprite {
 
     @Override
     public void startGame() {
-        mPositionX = mMaxX / 2;
-        mPositionY = mMaxY / 2;
+        mX = mMaxX / 2;
+        mY = mMaxY / 2;
     }
 
     @Override
@@ -50,7 +48,7 @@ public class Player extends Sprite {
             if (b == null) {
                 return;
             }
-            b.init(this, mPositionX + mImageWidth / 2, mPositionY);
+            b.init(this, mX + mWidth / 2, mY);
             gameEngine.addGameObject(b);
             mTimeSinceLastFire = 0;
         } else {
@@ -59,19 +57,19 @@ public class Player extends Sprite {
     }
 
     private void updatePosition(long elapsedTime, InputController inputController) {
-        mPositionX += mSpeedFactor * inputController.mHorizontalFactor * elapsedTime;
-        if (mPositionX < 0) {
-            mPositionX = 0;
+        mX += mSpeedFactor * inputController.mHorizontalFactor * elapsedTime;
+        if (mX < 0) {
+            mX = 0;
         }
-        if (mPositionX > mMaxX) {
-            mPositionX = mMaxX;
+        if (mX > mMaxX) {
+            mX = mMaxX;
         }
-        mPositionY += mSpeedFactor * inputController.mVerticalFactor * elapsedTime;
-        if (mPositionY < 0) {
-            mPositionY = 0;
+        mY += mSpeedFactor * inputController.mVerticalFactor * elapsedTime;
+        if (mY < 0) {
+            mY = 0;
         }
-        if (mPositionY > mMaxY) {
-            mPositionY = mMaxY;
+        if (mY > mMaxY) {
+            mY = mMaxY;
         }
     }
 
@@ -84,5 +82,18 @@ public class Player extends Sprite {
 
     public void releaseBullet(Bullet b) {
         bullets.add(b);
+    }
+
+    public void onCollision(GameEngine gameEngine, ScreenGameObject otherObject) {
+        if (otherObject instanceof Asteroid) {
+            // Remove both from the game (and return them to their pools)
+            removeObject(gameEngine);
+            Asteroid a = (Asteroid) otherObject;
+            a.removeObject(gameEngine);
+        }
+    }
+
+    public void removeObject(GameEngine gameEngine) {
+        //gameEngine.stopGame();
     }
 }

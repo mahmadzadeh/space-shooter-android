@@ -7,17 +7,13 @@ import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
-public abstract class Sprite extends GameObject {
+public abstract class Sprite extends ScreenGameObject {
 
-    protected double mPositionX;
-    protected double mPositionY;
     protected double mRotation;
 
     protected final double mPixelFactor;
 
     private final Bitmap mBitmap;
-    protected final int mImageHeight;
-    protected final int mImageWidth;
 
     private final Matrix mMatrix = new Matrix();
 
@@ -26,25 +22,25 @@ public abstract class Sprite extends GameObject {
         Drawable spriteDrawable = r.getDrawable(drawableRes);
         mPixelFactor = gameEngine.mPixelFactor;
 
-        mImageHeight = (int) (spriteDrawable.getIntrinsicHeight()*mPixelFactor);
-        mImageWidth = (int) (spriteDrawable.getIntrinsicWidth()*mPixelFactor);
+        mHeight = (int) (spriteDrawable.getIntrinsicHeight()*mPixelFactor);
+        mWidth = (int) (spriteDrawable.getIntrinsicWidth()*mPixelFactor);
 
         mBitmap = ((BitmapDrawable) spriteDrawable).getBitmap();
     }
 
     @Override
     public void onDraw(Canvas canvas) {
-        if (mPositionX > canvas.getWidth()
-                || mPositionY > canvas.getHeight()
-                || mPositionX < -mImageWidth
-                || mPositionY < -mImageHeight) {
+        if (mX > canvas.getWidth()
+                || mY > canvas.getHeight()
+                || mX < -mWidth
+                || mY < -mHeight) {
             return;
         }
 
         mMatrix.reset();
         mMatrix.postScale((float) mPixelFactor, (float) mPixelFactor);
-        mMatrix.postTranslate((float) mPositionX, (float) mPositionY);
-        mMatrix.postRotate((float) mRotation, (float) (mPositionX + mImageWidth/2), (float) (mPositionY + mImageHeight/2));
+        mMatrix.postTranslate((float) mX, (float) mY);
+        mMatrix.postRotate((float) mRotation, (float) (mX + mWidth/2), (float) (mY + mHeight/2));
 
         canvas.drawBitmap(mBitmap, mMatrix, null);
     }

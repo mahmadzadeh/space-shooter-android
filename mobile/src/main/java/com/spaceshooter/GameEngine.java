@@ -1,31 +1,33 @@
 package com.spaceshooter;
 
 
+import android.app.Activity;
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import android.app.Activity;
-import android.content.Context;
-
 
 public class GameEngine {
 
-    private final GameView mGameView;
     public final double mPixelFactor;
+    public final int mWidth;
+    public final int mHeight;
+    private final GameView mGameView;
+    public InputController inputController;
+    public Random mRandom = new Random();
+
     private List<GameObject> mGameObjects = new ArrayList<GameObject>();
     private List<GameObject> mObjectsToAdd = new ArrayList<GameObject>();
     private List<GameObject> mObjectsToRemove = new ArrayList<GameObject>();
+    private List<ScreenGameObject> mCollisionableObjects = new ArrayList<>();
 
     private UpdateThread mUpdateThread;
     private DrawThread mDrawThread;
-    public InputController inputController;
-    public final int mWidth;
-    public final int mHeight;
     private Activity mActivity;
-    public Random mRandom = new Random();
 
-    public GameEngine (Activity a, GameView gameView)  {
+    public GameEngine(Activity a, GameView gameView) {
         mActivity = a;
         mGameView = gameView;
         gameView.setGameObjects(mGameObjects);
@@ -44,7 +46,7 @@ public class GameEngine {
 
         // Setup the game objects
         int numGameObjects = mGameObjects.size();
-        for (int i=0; i<numGameObjects; i++) {
+        for (int i = 0; i < numGameObjects; i++) {
             mGameObjects.get(i).startGame();
         }
 
@@ -85,16 +87,28 @@ public class GameEngine {
     }
 
     public void addGameObject(GameObject gameObject) {
-        if (isRunning()){
+        if (isRunning()) {
             mObjectsToAdd.add(gameObject);
-        }
-        else {
+        } else {
             mGameObjects.add(gameObject);
         }
+
+        addToCollidableObjects(gameObject);
+
         mActivity.runOnUiThread(gameObject.onAddedRunnable);
     }
 
-    public void removeGameObject(GameObject gameObject) {
+    private void addToCollidableObjects(GameObject gameObject) {
+        if ((gameObject instanceof Player) ||
+                (gameObject instanceof Bullet) ||
+                (gameObject instanceof Asteroid)) {
+
+            mCollisionableObjects.add((ScreenGameObject) gameObject);
+        }
+
+    }
+
+    public void removeGameObject(ScreenGameObject gameObject) {
         mObjectsToRemove.add(gameObject);
         mActivity.runOnUiThread(gameObject.onRemovedRunnable);
     }
@@ -102,9 +116,12 @@ public class GameEngine {
     public void onUpdate(long elapsedMillis) {
         //inputController.onPreUpdate();
         int numGameObjects = mGameObjects.size();
-        for (int i=0; i<numGameObjects; i++) {
+        for (int i = 0; i < numGameObjects; i++) {
             mGameObjects.get(i).onUpdate(elapsedMillis, this);
         }
+
+        checkCollisions();
+
         synchronized (mGameObjects) {
             while (!mObjectsToRemove.isEmpty()) {
                 mGameObjects.remove(mObjectsToRemove.remove(0));
@@ -133,5 +150,19 @@ public class GameEngine {
 
     public Context getContext() {
         return mGameView.getContext();
+    }
+
+    public void checkCollisions() {
+        int numObjects = mCollisionableObjects.size();
+        for (int i = 0; i < numObjects; i++) {
+            ScreenGameObject screenGameObjectA = mCollisionableObjects.get(i);
+            for (int j = i + 1; j < numObjects; j++) {
+                ScreenGameObject screenGameObjectB = mCollisionableObjects.get(j);
+                if (screenGameObjectA.checkCollision(screenGameObjectB)) {
+                    screenGameObjectA.onCollision(this, screenGameObjectB);
+                    screenGameObjectB.onCollision(this, screenGameObjectA);
+                }
+            }
+        }
     }
 }
