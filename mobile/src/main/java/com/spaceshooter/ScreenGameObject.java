@@ -5,31 +5,32 @@ import android.graphics.Rect;
 
 public abstract class ScreenGameObject extends GameObject {
 
+    public Rect mBoundingRect = new Rect(-1, -1, -1, -1);
     protected double mX;
     protected double mY;
-
     protected int mHeight;
     protected int mWidth;
 
-    public Rect mBoundingRect = new Rect(-1, -1, -1, -1);
-
     public boolean checkCollision(ScreenGameObject gameObject) {
+        return checkRectangularCollision(gameObject);
+    }
 
-        return
-                new Rect(
-                        (int)this.mX,
-                        (int)this.mY,
-                        (int)this.mX+this.mWidth,
-                        (int)this.mY+this.mHeight)
-                        .intersect(
-                                new Rect(
-                                        (int)gameObject.mX,
-                                        (int)gameObject.mY,
-                                        (int)(gameObject.mX+gameObject.mWidth),
-                                        (int)(gameObject.mX+gameObject.mWidth)
-                                        ));
+    private boolean checkRectangularCollision(ScreenGameObject other) {
+        return Rect.intersects(mBoundingRect, other.mBoundingRect);
     }
 
     public void onCollision(GameEngine gameEngine, ScreenGameObject sgo) {
+    }
+
+    public void onPostUpdate(GameEngine gameEngine) {
+        mBoundingRect.set(
+                (int) mX,
+                (int) mY,
+                (int) mX + mWidth,
+                (int) mY + mHeight);
+    }
+
+    public String toString() {
+        return this.getClass().getSimpleName();
     }
 }

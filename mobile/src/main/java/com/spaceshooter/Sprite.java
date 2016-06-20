@@ -3,9 +3,13 @@ package com.spaceshooter;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+
+import java.text.DecimalFormat;
 
 public abstract class Sprite extends ScreenGameObject {
 
@@ -16,6 +20,10 @@ public abstract class Sprite extends ScreenGameObject {
     private final Bitmap mBitmap;
 
     private final Matrix mMatrix = new Matrix();
+    private final Paint mPaint = new Paint();
+
+    protected double mSpeedX;
+    protected double mSpeedY;
 
     protected Sprite(GameEngine gameEngine, int drawableRes) {
         Resources r = gameEngine.getContext().getResources();
@@ -36,6 +44,14 @@ public abstract class Sprite extends ScreenGameObject {
                 || mY < -mHeight) {
             return;
         }
+
+        DecimalFormat df2 = new DecimalFormat(".##");
+
+        mPaint.setColor(Color.YELLOW);
+        canvas.drawRect(mBoundingRect, mPaint);
+        String s = "X=" + mSpeedX + " Y=" + mSpeedY;
+        mPaint.setTextSize(80);
+        canvas.drawText(s, (float)mX, (float)mY,  mPaint);
 
         mMatrix.reset();
         mMatrix.postScale((float) mPixelFactor, (float) mPixelFactor);

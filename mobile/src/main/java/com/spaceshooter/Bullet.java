@@ -50,8 +50,8 @@ public class Bullet extends Sprite  {
     }
 
     private void removeObject(GameEngine gameEngine) {
-        mParent.releaseBullet(this);
         gameEngine.removeGameObject(this);
+        mParent.releaseBullet(this);
     }
 
 }

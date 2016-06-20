@@ -30,4 +30,7 @@ public abstract class GameObject {
     }
 
     public abstract void onDraw(Canvas canvas);
+
+    public void onPostUpdate(GameEngine gameEngine) {
+    }
 }

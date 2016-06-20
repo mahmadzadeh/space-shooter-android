@@ -6,8 +6,7 @@ public class Asteroid extends Sprite {
     private final GameController mController;
 
     private final double mSpeed;
-    private double mSpeedX;
-    private double mSpeedY;
+
     private double mRotationSpeed;
 
     public Asteroid(GameController gameController, GameEngine gameEngine) {
