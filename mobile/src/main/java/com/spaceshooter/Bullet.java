@@ -29,7 +29,6 @@ public class Bullet extends Sprite  {
         mY += mSpeedFactor * elapsedMillis;
         if (mY < -mHeight) {
             gameEngine.removeGameObject(this);
-            // And return it to the pool
             mParent.releaseBullet(this);
         }
     }
@@ -42,14 +41,13 @@ public class Bullet extends Sprite  {
 
     public void onCollision(GameEngine gameEngine, ScreenGameObject otherObject) {
         if (otherObject instanceof Asteroid) {
-            // Remove both from the game (and return them to their pools)
             removeObject(gameEngine);
             Asteroid a = (Asteroid) otherObject;
             a.removeObject(gameEngine);
         }
     }
 
-    private void removeObject(GameEngine gameEngine) {
+    public void removeObject(GameEngine gameEngine) {
         gameEngine.removeGameObject(this);
         mParent.releaseBullet(this);
     }

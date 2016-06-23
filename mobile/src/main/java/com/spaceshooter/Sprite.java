@@ -47,12 +47,6 @@ public abstract class Sprite extends ScreenGameObject {
 
         DecimalFormat df2 = new DecimalFormat(".##");
 
-        mPaint.setColor(Color.YELLOW);
-        canvas.drawRect(mBoundingRect, mPaint);
-        String s = "X=" + mSpeedX + " Y=" + mSpeedY;
-        mPaint.setTextSize(80);
-        canvas.drawText(s, (float)mX, (float)mY,  mPaint);
-
         mMatrix.reset();
         mMatrix.postScale((float) mPixelFactor, (float) mPixelFactor);
         mMatrix.postTranslate((float) mX, (float) mY);
