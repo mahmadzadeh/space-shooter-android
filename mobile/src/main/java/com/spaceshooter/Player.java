@@ -86,14 +86,13 @@ public class Player extends Sprite {
 
     public void onCollision(GameEngine gameEngine, ScreenGameObject otherObject) {
         if (otherObject instanceof Asteroid) {
-            // Remove both from the game (and return them to their pools)
-            removeObject(gameEngine);
+            gameEngine.removeGameObject(this);
             Asteroid a = (Asteroid) otherObject;
             a.removeObject(gameEngine);
+            gameEngine.stopGame();
         }
     }
 
     public void removeObject(GameEngine gameEngine) {
-        //gameEngine.stopGame();
     }
 }
