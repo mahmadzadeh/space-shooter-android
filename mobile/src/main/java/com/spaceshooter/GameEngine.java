@@ -32,7 +32,7 @@ public class GameEngine {
     public GameEngine(Activity a, GameView gameView) {
         mActivity = a;
         mGameView = gameView;
-        gameView.setGameObjects(mGameObjects);
+        mGameView.setGameObjects(mGameObjects);
         mWidth = gameView.getWidth()
                 - gameView.getPaddingRight() - gameView.getPaddingRight();
         mHeight = gameView.getHeight()
