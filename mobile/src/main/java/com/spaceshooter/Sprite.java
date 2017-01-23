@@ -3,25 +3,18 @@ package com.spaceshooter;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
-import java.text.DecimalFormat;
-
 public abstract class Sprite extends ScreenGameObject {
 
-    protected double mRotation;
-
     protected final double mPixelFactor;
-
     private final Bitmap mBitmap;
-
     private final Matrix mMatrix = new Matrix();
     private final Paint mPaint = new Paint();
-
+    protected double mRotation;
     protected double mSpeedX;
     protected double mSpeedY;
 
@@ -30,8 +23,8 @@ public abstract class Sprite extends ScreenGameObject {
         Drawable spriteDrawable = r.getDrawable(drawableRes);
         mPixelFactor = gameEngine.mPixelFactor;
 
-        mHeight = (int) (spriteDrawable.getIntrinsicHeight()*mPixelFactor);
-        mWidth = (int) (spriteDrawable.getIntrinsicWidth()*mPixelFactor);
+        mHeight = (int) (spriteDrawable.getIntrinsicHeight() * mPixelFactor);
+        mWidth = (int) (spriteDrawable.getIntrinsicWidth() * mPixelFactor);
 
         mBitmap = ((BitmapDrawable) spriteDrawable).getBitmap();
     }
@@ -45,12 +38,10 @@ public abstract class Sprite extends ScreenGameObject {
             return;
         }
 
-        DecimalFormat df2 = new DecimalFormat(".##");
-
         mMatrix.reset();
         mMatrix.postScale((float) mPixelFactor, (float) mPixelFactor);
         mMatrix.postTranslate((float) mX, (float) mY);
-        mMatrix.postRotate((float) mRotation, (float) (mX + mWidth/2), (float) (mY + mHeight/2));
+        mMatrix.postRotate((float) mRotation, (float) (mX + mWidth / 2), (float) (mY + mHeight / 2));
 
         canvas.drawBitmap(mBitmap, mMatrix, null);
     }

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 public class MainMenuFragment extends SpaceShooterBaseFragment implements View.OnClickListener {
 
     public MainMenuFragment() {
@@ -24,6 +25,6 @@ public class MainMenuFragment extends SpaceShooterBaseFragment implements View.O
 
     @Override
     public void onClick(View v) {
-        ((SpaceShooterActivity)getActivity()).startGame();
+        ((SpaceShooterActivity) getActivity()).startGame();
     }
 }

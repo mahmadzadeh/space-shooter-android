@@ -1,15 +1,7 @@
 package com.spaceshooter;
 
 
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-
-public class Bullet extends Sprite  {
+public class Bullet extends Sprite {
     private double mSpeedFactor;
 
     private Player mParent;
@@ -34,8 +26,8 @@ public class Bullet extends Sprite  {
     }
 
     public void init(Player parent, double positionX, double positionY) {
-        mX = positionX - mWidth/2;
-        mY = positionY - mHeight/2;
+        mX = positionX - mWidth / 2;
+        mY = positionY - mHeight / 2;
         mParent = parent;
     }
 

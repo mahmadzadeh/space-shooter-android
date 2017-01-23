@@ -51,12 +51,12 @@ public class SurfaceGameView extends SurfaceView implements SurfaceHolder.Callba
         }
 
         Canvas canvas = getHolder().lockCanvas();
-        if(canvas == null) {
+        if (canvas == null) {
             return;
         }
 
-        canvas.drawRGB(0,0,0);
-        synchronized (gameObjects){
+        canvas.drawRGB(0, 0, 0);
+        synchronized (gameObjects) {
             int numObjects = gameObjects.size();
             for (int i = 0; i < numObjects; i++) {
                 gameObjects.get(i).onDraw(canvas);

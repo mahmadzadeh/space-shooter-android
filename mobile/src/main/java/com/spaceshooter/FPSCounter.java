@@ -20,9 +20,9 @@ public class FPSCounter extends GameObject {
     public FPSCounter(GameEngine gameEngine) {
         mPaint = new Paint();
         mPaint.setTextAlign(Paint.Align.CENTER);
-        mTextHeight = (float) (25*gameEngine.mPixelFactor);
-        mTextWidth = (float) (50*gameEngine.mPixelFactor);
-        mPaint.setTextSize(mTextHeight/2);
+        mTextHeight = (float) (25 * gameEngine.mPixelFactor);
+        mTextWidth = (float) (50 * gameEngine.mPixelFactor);
+        mPaint.setTextSize(mTextHeight / 2);
         mPixelFactor = gameEngine.mPixelFactor;
     }
 
@@ -35,8 +35,8 @@ public class FPSCounter extends GameObject {
     public void onUpdate(long elapsedMillis, GameEngine gameEngine) {
         mTotalMillis += elapsedMillis;
         if (mTotalMillis > 1000) {
-            mFps = mDraws*1000 / mTotalMillis;
-            mFpsText = mFps+" fps";
+            mFps = mDraws * 1000 / mTotalMillis;
+            mFpsText = mFps + " fps";
             mTotalMillis = 0;
             mDraws = 0;
         }
@@ -45,9 +45,9 @@ public class FPSCounter extends GameObject {
     @Override
     public void onDraw(Canvas canvas) {
         mPaint.setColor(Color.BLACK);
-        canvas.drawRect(0,(int)(canvas.getHeight()-mTextHeight), mTextWidth, canvas.getHeight(), mPaint);
+        canvas.drawRect(0, (int) (canvas.getHeight() - mTextHeight), mTextWidth, canvas.getHeight(), mPaint);
         mPaint.setColor(Color.WHITE);
-        canvas.drawText(mFpsText, mTextWidth/2, (int) (canvas.getHeight()-mTextHeight/2), mPaint);
+        canvas.drawText(mFpsText, mTextWidth / 2, (int) (canvas.getHeight() - mTextHeight / 2), mPaint);
         mDraws++;
     }
 

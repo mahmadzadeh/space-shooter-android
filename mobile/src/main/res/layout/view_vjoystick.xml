@@ -4,14 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <View android:id="@+id/vjoystick_main"
+    <View
+        android:id="@+id/vjoystick_main"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_weight="1"
-        />
-    <View android:id="@+id/vjoystick_touch"
+        android:layout_weight="1" />
+
+    <View
+        android:id="@+id/vjoystick_touch"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_weight="1"
-        />
+        android:layout_weight="1" />
 </LinearLayout>

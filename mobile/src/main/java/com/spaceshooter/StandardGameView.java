@@ -7,7 +7,7 @@ import android.view.View;
 
 import java.util.List;
 
-public class StandardGameView extends View implements GameView{
+public class StandardGameView extends View implements GameView {
 
     private List<GameObject> mGameObjects;
 
@@ -39,7 +39,7 @@ public class StandardGameView extends View implements GameView{
         super.onDraw(canvas);
         synchronized (mGameObjects) {
             int numObjects = mGameObjects != null ? mGameObjects.size() : 0;
-            for(int i = 0 ; i< numObjects; i++){
+            for (int i = 0; i < numObjects; i++) {
                 mGameObjects.get(i).onDraw(canvas);
             }
         }

@@ -34,10 +34,9 @@ public class GameFragment extends SpaceShooterBaseFragment implements View.OnCli
 
                     @Override
                     public void onGlobalLayout() {
-                        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
                             observer.removeGlobalOnLayoutListener(this);
-                        }
-                        else {
+                        } else {
                             observer.removeOnGlobalLayoutListener(this);
                         }
                         GameView gameView = (GameView) getView().findViewById(R.id.gameView);
@@ -63,7 +62,7 @@ public class GameFragment extends SpaceShooterBaseFragment implements View.OnCli
     @Override
     public void onPause() {
         super.onPause();
-        if (mGameEngine.isRunning()){
+        if (mGameEngine.isRunning()) {
             pauseGameAndShowPauseDialog();
         }
     }
@@ -100,7 +99,7 @@ public class GameFragment extends SpaceShooterBaseFragment implements View.OnCli
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         mGameEngine.stopGame();
-                        ((SpaceShooterActivity)getActivity()).navigateBack();
+                        ((SpaceShooterActivity) getActivity()).navigateBack();
                     }
                 })
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -119,8 +118,7 @@ public class GameFragment extends SpaceShooterBaseFragment implements View.OnCli
         if (mGameEngine.isPaused()) {
             mGameEngine.resumeGame();
             button.setText(R.string.pause);
-        }
-        else {
+        } else {
             mGameEngine.pauseGame();
             button.setText(R.string.resume);
         }

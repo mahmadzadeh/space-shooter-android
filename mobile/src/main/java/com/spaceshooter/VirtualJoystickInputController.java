@@ -16,7 +16,7 @@ public class VirtualJoystickInputController extends InputController {
         view.findViewById(R.id.vjoystick_touch).setOnTouchListener(new VFireButtonTouchListener());
 
         double pixelFactor = view.getHeight() / 400d;
-        mMaxDistance = 50*pixelFactor;
+        mMaxDistance = 50 * pixelFactor;
     }
 
 
@@ -27,25 +27,21 @@ public class VirtualJoystickInputController extends InputController {
             if (action == MotionEvent.ACTION_DOWN) {
                 mStartingPositionX = event.getX(0);
                 mStartingPositionY = event.getY(0);
-            }
-            else if (action == MotionEvent.ACTION_UP) {
+            } else if (action == MotionEvent.ACTION_UP) {
                 mHorizontalFactor = 0;
                 mVerticalFactor = 0;
-            }
-            else if (action == MotionEvent.ACTION_MOVE) {
+            } else if (action == MotionEvent.ACTION_MOVE) {
                 // Get the proportion to the max
                 mHorizontalFactor = (event.getX(0) - mStartingPositionX) / mMaxDistance;
                 if (mHorizontalFactor > 1) {
                     mHorizontalFactor = 1;
-                }
-                else if (mHorizontalFactor < -1) {
+                } else if (mHorizontalFactor < -1) {
                     mHorizontalFactor = -1;
                 }
                 mVerticalFactor = (event.getY(0) - mStartingPositionY) / mMaxDistance;
                 if (mVerticalFactor > 1) {
                     mVerticalFactor = 1;
-                }
-                else if (mVerticalFactor < -1) {
+                } else if (mVerticalFactor < -1) {
                     mVerticalFactor = -1;
                 }
             }
@@ -59,8 +55,7 @@ public class VirtualJoystickInputController extends InputController {
             int action = event.getActionMasked();
             if (action == MotionEvent.ACTION_DOWN) {
                 mIsFiring = true;
-            }
-            else if (action == MotionEvent.ACTION_UP) {
+            } else if (action == MotionEvent.ACTION_UP) {
                 mIsFiring = false;
             }
             return true;

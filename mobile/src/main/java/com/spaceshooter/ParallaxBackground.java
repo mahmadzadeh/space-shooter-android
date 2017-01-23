@@ -33,10 +33,10 @@ public class ParallaxBackground extends GameObject {
         mBitmap = ((BitmapDrawable) spriteDrawable).getBitmap();
 
         mPixelFactor = gameEngine.mPixelFactor;
-        mSpeedY = speed*mPixelFactor/1000d;
+        mSpeedY = speed * mPixelFactor / 1000d;
 
-        mImageHeight = spriteDrawable.getIntrinsicHeight()*mPixelFactor;
-        mImageWidth = spriteDrawable.getIntrinsicWidth()*mPixelFactor;
+        mImageHeight = spriteDrawable.getIntrinsicHeight() * mPixelFactor;
+        mImageWidth = spriteDrawable.getIntrinsicWidth() * mPixelFactor;
 
         mScreenHeight = gameEngine.mHeight;
         mScreenWidth = gameEngine.mWidth;
@@ -80,19 +80,18 @@ public class ParallaxBackground extends GameObject {
     private void efficientDraw(Canvas canvas) {
         if (mPositionY < 0) {
             mSrcRect.set(0,
-                    (int) (-mPositionY/mPixelFactor),
-                    (int) (mTargetWidth/mPixelFactor),
-                    (int) ((mScreenHeight - mPositionY)/mPixelFactor));
+                    (int) (-mPositionY / mPixelFactor),
+                    (int) (mTargetWidth / mPixelFactor),
+                    (int) ((mScreenHeight - mPositionY) / mPixelFactor));
             mDstRect.set(0,
                     0,
                     (int) mTargetWidth,
                     (int) mScreenHeight);
             canvas.drawBitmap(mBitmap, mSrcRect, mDstRect, null);
-        }
-        else {
+        } else {
             mSrcRect.set(0,
                     0,
-                    (int) (mTargetWidth/mPixelFactor),
+                    (int) (mTargetWidth / mPixelFactor),
                     (int) ((mScreenHeight - mPositionY) / mPixelFactor));
             mDstRect.set(0,
                     (int) mPositionY,
@@ -102,8 +101,8 @@ public class ParallaxBackground extends GameObject {
             // We need to draw the previous block
             mSrcRect.set(0,
                     (int) ((mImageHeight - mPositionY) / mPixelFactor),
-                    (int) (mTargetWidth/mPixelFactor),
-                    (int) (mImageHeight/mPixelFactor));
+                    (int) (mTargetWidth / mPixelFactor),
+                    (int) (mImageHeight / mPixelFactor));
             mDstRect.set(0,
                     0,
                     (int) mTargetWidth,

@@ -25,7 +25,7 @@ public abstract class GameObject {
 
     }
 
-    public void onAddedToGameUiThread(){
+    public void onAddedToGameUiThread() {
 
     }
 
