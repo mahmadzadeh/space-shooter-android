@@ -57,7 +57,7 @@ public class UpdateThread extends Thread {
     }
 
     public void resumeGame() {
-        if (mPauseGame == true) {
+        if (mPauseGame) {
             mPauseGame = false;
             synchronized (mLock) {
                 mLock.notify();
