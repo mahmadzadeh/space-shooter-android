@@ -3,16 +3,16 @@ package com.spaceshooter;
 
 public class Asteroid extends Sprite {
 
-    private final GameController mController;
+    private final AsteroidPool asteroidPool;
 
     private final double mSpeed;
 
     private double mRotationSpeed;
 
-    public Asteroid(GameController gameController, GameEngine gameEngine) {
+    public Asteroid( AsteroidPool asteroidPool, GameEngine gameEngine) {
         super(gameEngine, R.drawable.a10000);
-        mSpeed = 200d * mPixelFactor / 1000d;
-        mController = gameController;
+        mSpeed = 200d * pixelFactor / 1000d;
+        this.asteroidPool = asteroidPool;
     }
 
     @Override
@@ -22,31 +22,35 @@ public class Asteroid extends Sprite {
     @Override
     public void onUpdate(long elapsedMillis, GameEngine gameEngine) {
 
-        mX += mSpeedX * elapsedMillis;
-        mY += mSpeedY * elapsedMillis;
-        mRotation += mRotationSpeed * elapsedMillis;
-        if (mRotation > 360) {
-            mRotation = 0;
-        } else if (mRotation < 0) {
-            mRotation = 360;
+        xPosition += speedX * elapsedMillis;
+        yPosition += speedY * elapsedMillis;
+        rotation += mRotationSpeed * elapsedMillis;
+        if ( rotation > 360) {
+            rotation = 0;
+        } else if ( rotation < 0) {
+            rotation = 360;
         }
 
         if (isOutsideScreen(gameEngine)) {
             gameEngine.removeGameObject(this);
-            mController.returnToPool(this);
+            asteroidPool.returnToPool(this);
         }
     }
 
     public void init(GameEngine gameEngine) {
-        double angle = gameEngine.mRandom.nextDouble() * Math.PI / 3d - Math.PI / 6d;
-        mSpeedX = mSpeed * Math.sin(angle);
-        mSpeedY = mSpeed * Math.cos(angle);
+        double angle = getAngle();
+        speedX = mSpeed * Math.sin(angle);
+        speedY = mSpeed * Math.cos(angle);
 
-        mX = gameEngine.mRandom.nextInt(gameEngine.mWidth / 2) + gameEngine.mWidth / 4;
-        mY = -mHeight;
+        xPosition = gameEngine.mRandom.nextInt(gameEngine.mWidth / 2) + gameEngine.mWidth / 4;
+        yPosition = -height;
 
         mRotationSpeed = angle * (180d / Math.PI) / 250d; // They rotate 4 times their ange in a second.
-        mRotation = gameEngine.mRandom.nextInt(360);
+        rotation = gameEngine.mRandom.nextInt(360);
+    }
+
+    public static double getAngle( ) {
+        return    Math.toRadians(Math.random() * 30);
     }
 
     public void onCollision(GameEngine gameEngine, ScreenGameObject otherObject) {
@@ -64,10 +68,10 @@ public class Asteroid extends Sprite {
 
     public void removeObject(GameEngine gameEngine) {
         gameEngine.removeGameObject(this);
-        mController.returnToPool(this);
+        asteroidPool.returnToPool(this);
     }
 
     private boolean isOutsideScreen(GameEngine gameEngine) {
-        return mY > gameEngine.mHeight;
+        return yPosition > gameEngine.mHeight;
     }
 }

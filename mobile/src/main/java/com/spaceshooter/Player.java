@@ -7,7 +7,7 @@ public class Player extends Sprite {
     private static final long TIME_BETWEEN_BULLETS = 250;
     private static final int INITIAL_BULLET_POOL_AMOUNT = 6;
 
-    private List<Bullet> bullets = new ArrayList<Bullet>();
+    private List<Bullet> bullets = new ArrayList<>();
 
     private int mMaxX;
     private int mMaxY;
@@ -16,10 +16,10 @@ public class Player extends Sprite {
 
     public Player(GameEngine gameEngine) {
         super(gameEngine, R.drawable.ship);
-        mSpeedFactor = mPixelFactor * 100d / 1000d;
+        mSpeedFactor = pixelFactor * 100d / 1000d;
 
-        mMaxX = gameEngine.mWidth - mWidth;
-        mMaxY = gameEngine.mHeight - mHeight;
+        mMaxX = gameEngine.mWidth - width;
+        mMaxY = gameEngine.mHeight - height;
 
         initBulletPool(gameEngine);
     }
@@ -32,8 +32,8 @@ public class Player extends Sprite {
 
     @Override
     public void startGame() {
-        mX = mMaxX / 2;
-        mY = mMaxY / 2;
+        xPosition = mMaxX / 2;
+        yPosition = mMaxY / 2;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class Player extends Sprite {
             if (b == null) {
                 return;
             }
-            b.init(this, mX + mWidth / 2, mY);
+            b.init(this, xPosition + width / 2, yPosition );
             gameEngine.addGameObject(b);
             mTimeSinceLastFire = 0;
         } else {
@@ -57,19 +57,19 @@ public class Player extends Sprite {
     }
 
     private void updatePosition(long elapsedTime, InputController inputController) {
-        mX += mSpeedFactor * inputController.mHorizontalFactor * elapsedTime;
-        if (mX < 0) {
-            mX = 0;
+        xPosition += mSpeedFactor * inputController.mHorizontalFactor * elapsedTime;
+        if ( xPosition < 0) {
+            xPosition = 0;
         }
-        if (mX > mMaxX) {
-            mX = mMaxX;
+        if ( xPosition > mMaxX) {
+            xPosition = mMaxX;
         }
-        mY += mSpeedFactor * inputController.mVerticalFactor * elapsedTime;
-        if (mY < 0) {
-            mY = 0;
+        yPosition += mSpeedFactor * inputController.mVerticalFactor * elapsedTime;
+        if ( yPosition < 0) {
+            yPosition = 0;
         }
-        if (mY > mMaxY) {
-            mY = mMaxY;
+        if ( yPosition > mMaxY) {
+            yPosition = mMaxY;
         }
     }
 

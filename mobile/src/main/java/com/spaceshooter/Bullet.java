@@ -18,16 +18,16 @@ public class Bullet extends Sprite {
 
     @Override
     public void onUpdate(long elapsedMillis, GameEngine gameEngine) {
-        mY += mSpeedFactor * elapsedMillis;
-        if (mY < -mHeight) {
+        yPosition += mSpeedFactor * elapsedMillis;
+        if ( yPosition < -height ) {
             gameEngine.removeGameObject(this);
             mParent.releaseBullet(this);
         }
     }
 
     public void init(Player parent, double positionX, double positionY) {
-        mX = positionX - mWidth / 2;
-        mY = positionY - mHeight / 2;
+        xPosition = positionX - width / 2;
+        yPosition = positionY - height / 2;
         mParent = parent;
     }
 

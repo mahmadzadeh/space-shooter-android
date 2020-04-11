@@ -1,7 +1,6 @@
 package com.spaceshooter;
 
 
-import android.app.Activity;
 import android.content.Context;
 
 import java.util.ArrayList;
@@ -18,23 +17,21 @@ public class GameEngine {
     public InputController inputController;
     public Random mRandom = new Random();
 
-    private List<GameObject> mGameObjects = new ArrayList<GameObject>();
-    private List<GameObject> mObjectsToAdd = new ArrayList<GameObject>();
-    private List<GameObject> mObjectsToRemove = new ArrayList<GameObject>();
+    private List<GameObject> mGameObjects = new ArrayList<>();
+    private List<GameObject> mObjectsToAdd = new ArrayList<>();
+    private List<GameObject> mObjectsToRemove = new ArrayList<>();
 
-    private List<ScreenGameObject> mCollidableObjectsToAdd = new ArrayList<ScreenGameObject>();
+    private List<ScreenGameObject> mCollidableObjectsToAdd = new ArrayList<>();
     private List<ScreenGameObject> mCollisionableObjects = new ArrayList<>();
 
     private UpdateThread mUpdateThread;
     private DrawThread mDrawThread;
-    private Activity mActivity;
 
-    public GameEngine(Activity a, GameView gameView) {
-        mActivity = a;
+    public GameEngine( GameView gameView ) {
         mGameView = gameView;
         mGameView.setGameObjects(mGameObjects);
         mWidth = gameView.getWidth()
-                - gameView.getPaddingRight() - gameView.getPaddingRight();
+                - gameView.getPaddingRight() - gameView.getPaddingLeft();
         mHeight = gameView.getHeight()
                 - gameView.getPaddingTop() - gameView.getPaddingBottom();
 
@@ -87,14 +84,11 @@ public class GameEngine {
     public void addGameObject(GameObject gameObject) {
         if (isRunning()) {
             mObjectsToAdd.add(gameObject);
-            //addToCollidableObjects(gameObject);
         } else {
             mGameObjects.add(gameObject);
         }
 
         addToCollidableObjects(gameObject);
-
-        mActivity.runOnUiThread(gameObject.onAddedRunnable);
     }
 
     private void addToCollidableObjects(GameObject gameObject) {
@@ -109,7 +103,6 @@ public class GameEngine {
 
     public void removeGameObject(ScreenGameObject gameObject) {
         mObjectsToRemove.add(gameObject);
-        mActivity.runOnUiThread(gameObject.onRemovedRunnable);
     }
 
     public void onUpdate(long elapsedMillis) {

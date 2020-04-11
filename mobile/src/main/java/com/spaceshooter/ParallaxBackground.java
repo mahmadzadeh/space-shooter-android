@@ -54,26 +54,8 @@ public class ParallaxBackground extends GameObject {
         mPositionY += mSpeedY * elapsedMillis;
     }
 
-    public void unefficientDraw(Canvas canvas) {
-        if (mPositionY > 0) {
-            mMatrix.reset();
-            mMatrix.postScale((float) (mPixelFactor), (float) (mPixelFactor));
-            mMatrix.postTranslate(0, (float) (mPositionY - mImageHeight));
-            canvas.drawBitmap(mBitmap, mMatrix, null);
-        }
-        mMatrix.reset();
-        mMatrix.postScale((float) (mPixelFactor), (float) (mPixelFactor));
-        mMatrix.postTranslate(0, (float) mPositionY);
-        canvas.drawBitmap(mBitmap, mMatrix, null);
-
-        if (mPositionY > mScreenHeight) {
-            mPositionY -= mImageHeight;
-        }
-    }
-
     @Override
     public void onDraw(Canvas canvas) {
-//        unefficientDraw(canvas);
         efficientDraw(canvas);
     }
 
