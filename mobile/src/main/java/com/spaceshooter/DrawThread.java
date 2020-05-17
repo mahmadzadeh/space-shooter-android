@@ -7,26 +7,26 @@ public class DrawThread extends Thread {
     private static int EXPECTED_FPS = 30;
     private static final long TIME_BETWEEN_DRAWS = 1000 / EXPECTED_FPS;
 
-    private final GameEngine mGameEngine;
+    private final GameEngine gameEngine;
     private Timer mTimer;
-    private boolean mGameIsRunning = true;
-    private boolean mPauseGame = false;
-    private java.lang.Object mLock = new Object();
+    private boolean isGameRunning = true;
+    private boolean isGamePaused = false;
+    private java.lang.Object lock = new Object();
 
     public DrawThread(GameEngine gameEngine) {
-        mGameEngine = gameEngine;
+        this.gameEngine = gameEngine;
     }
 
     public void stopGame() {
-        mGameIsRunning = false;
+        isGameRunning = false;
     }
 
     public void pauseGame() {
-        mPauseGame = true;
+        isGamePaused = true;
     }
 
     public void resumeGame() {
-        mPauseGame = false;
+        isGamePaused = false;
     }
 
     @Override
@@ -35,14 +35,14 @@ public class DrawThread extends Thread {
         long currentTimeMillis;
         long previousTimeMillis = System.currentTimeMillis();
 
-        while (mGameIsRunning) {
+        while ( isGameRunning ) {
             currentTimeMillis = System.currentTimeMillis();
             elapsedMillis = currentTimeMillis - previousTimeMillis;
-            if (mPauseGame) {
-                while (mPauseGame) {
+            if ( isGamePaused ) {
+                while ( isGamePaused ) {
                     try {
-                        synchronized (mLock) {
-                            mLock.wait();
+                        synchronized ( lock ) {
+                            lock.wait();
                         }
                     } catch (InterruptedException e) {
                         // We stay on the loop
@@ -57,7 +57,7 @@ public class DrawThread extends Thread {
                     // We just continue.
                 }
             }
-            mGameEngine.onDraw();
+            gameEngine.onDraw();
             previousTimeMillis = currentTimeMillis;
         }
     }

@@ -1,17 +1,21 @@
 package com.spaceshooter;
 
 
+import android.graphics.Bitmap;
+
 public class Asteroid extends Sprite {
 
     private final AsteroidPool asteroidPool;
 
-    private final double mSpeed;
+    private final double speed;
 
-    private double mRotationSpeed;
+    private double rotationSpeed;
 
-    public Asteroid( AsteroidPool asteroidPool, GameEngine gameEngine) {
-        super(gameEngine, R.drawable.a10000);
-        mSpeed = 200d * pixelFactor / 1000d;
+    public Asteroid( Bitmap bitmap, GameUiParameters parameters , AsteroidPool asteroidPool) {
+        super( bitmap, parameters );
+
+        speed = 200d * parameters.getPixelFactor() / 1000d;
+
         this.asteroidPool = asteroidPool;
     }
 
@@ -24,7 +28,7 @@ public class Asteroid extends Sprite {
 
         xPosition += speedX * elapsedMillis;
         yPosition += speedY * elapsedMillis;
-        rotation += mRotationSpeed * elapsedMillis;
+        rotation += rotationSpeed * elapsedMillis;
         if ( rotation > 360) {
             rotation = 0;
         } else if ( rotation < 0) {
@@ -39,14 +43,14 @@ public class Asteroid extends Sprite {
 
     public void init(GameEngine gameEngine) {
         double angle = getAngle();
-        speedX = mSpeed * Math.sin(angle);
-        speedY = mSpeed * Math.cos(angle);
+        speedX = speed * Math.sin(angle);
+        speedY = speed * Math.cos(angle);
 
-        xPosition = gameEngine.mRandom.nextInt(gameEngine.mWidth / 2) + gameEngine.mWidth / 4;
+        xPosition = gameEngine.random.nextInt(gameEngine.width / 2) + gameEngine.width / 4;
         yPosition = -height;
 
-        mRotationSpeed = angle * (180d / Math.PI) / 250d; // They rotate 4 times their ange in a second.
-        rotation = gameEngine.mRandom.nextInt(360);
+        rotationSpeed = angle * (180d / Math.PI) / 250d; // They rotate 4 times their ange in a second.
+        rotation = gameEngine.random.nextInt(360);
     }
 
     public static double getAngle( ) {
@@ -72,6 +76,6 @@ public class Asteroid extends Sprite {
     }
 
     private boolean isOutsideScreen(GameEngine gameEngine) {
-        return yPosition > gameEngine.mHeight;
+        return yPosition > gameEngine.height;
     }
 }

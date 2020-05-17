@@ -10,161 +10,158 @@ import java.util.Random;
 
 public class GameEngine {
 
-    public final double mPixelFactor;
-    public final int mWidth;
-    public final int mHeight;
-    private final GameView mGameView;
+    public final double pixelFactor;
+    public final int width;
+    public final int height;
+    private final GameView gameView;
     public InputController inputController;
-    public Random mRandom = new Random();
+    public Random random = new Random();
+    private List<GameObject> gameObjects = new ArrayList<>();
+    private List<GameObject> gameObjectsToAdd = new ArrayList<>();
+    private List<GameObject> gameObjectsToRemove = new ArrayList<>();
 
-    private List<GameObject> mGameObjects = new ArrayList<>();
-    private List<GameObject> mObjectsToAdd = new ArrayList<>();
-    private List<GameObject> mObjectsToRemove = new ArrayList<>();
+    private List<ScreenGameObject> collidableObjectsToAdd = new ArrayList<>();
+    private List<ScreenGameObject> collidableObjects = new ArrayList<>();
 
-    private List<ScreenGameObject> mCollidableObjectsToAdd = new ArrayList<>();
-    private List<ScreenGameObject> mCollisionableObjects = new ArrayList<>();
-
-    private UpdateThread mUpdateThread;
-    private DrawThread mDrawThread;
+    private UpdateThread updateThread;
+    private DrawThread drawThread;
 
     public GameEngine( GameView gameView ) {
-        mGameView = gameView;
-        mGameView.setGameObjects(mGameObjects);
-        mWidth = gameView.getWidth()
+        this.gameView = gameView;
+        this.gameView.setGameObjects( gameObjects );
+        width = gameView.getWidth()
                 - gameView.getPaddingRight() - gameView.getPaddingLeft();
-        mHeight = gameView.getHeight()
+        height = gameView.getHeight()
                 - gameView.getPaddingTop() - gameView.getPaddingBottom();
 
-        mPixelFactor = mHeight / 400d;
-
+        pixelFactor = height / 400d;
     }
 
-    public void startGame() {
+    public void startGame( ) {
         stopGame();
 
-        int numGameObjects = mGameObjects.size();
-        for (int i = 0; i < numGameObjects; i++) {
-            mGameObjects.get(i).startGame();
+        int numGameObjects = gameObjects.size();
+        for ( int i = 0; i < numGameObjects; i++ ) {
+            gameObjects.get( i ).startGame();
         }
 
-        mUpdateThread = new UpdateThread(this);
-        mUpdateThread.start();
+        updateThread = new UpdateThread( this );
+        updateThread.start();
 
-        mDrawThread = new DrawThread(this);
-        mDrawThread.start();
+        drawThread = new DrawThread( this );
+        drawThread.start();
     }
 
-    public void stopGame() {
-        if (mUpdateThread != null) {
-            mUpdateThread.stopGame();
+    public void stopGame( ) {
+        if ( updateThread != null ) {
+            updateThread.stopGame();
         }
-        if (mDrawThread != null) {
-            mDrawThread.stopGame();
-        }
-    }
-
-    public void pauseGame() {
-        if (mUpdateThread != null) {
-            mUpdateThread.pauseGame();
-        }
-        if (mDrawThread != null) {
-            mDrawThread.pauseGame();
+        if ( drawThread != null ) {
+            drawThread.stopGame();
         }
     }
 
-    public void resumeGame() {
-        if (mUpdateThread != null) {
-            mUpdateThread.resumeGame();
+    public void pauseGame( ) {
+        if ( updateThread != null ) {
+            updateThread.pauseGame();
         }
-        if (mDrawThread != null) {
-            mDrawThread.resumeGame();
+        if ( drawThread != null ) {
+            drawThread.pauseGame();
         }
     }
 
-    public void addGameObject(GameObject gameObject) {
-        if (isRunning()) {
-            mObjectsToAdd.add(gameObject);
+    public void resumeGame( ) {
+        if ( updateThread != null ) {
+            updateThread.resumeGame();
+        }
+        if ( drawThread != null ) {
+            drawThread.resumeGame();
+        }
+    }
+
+    public void addGameObject( GameObject gameObject ) {
+        if ( isRunning() ) {
+            gameObjectsToAdd.add( gameObject );
         } else {
-            mGameObjects.add(gameObject);
+            gameObjects.add( gameObject );
         }
 
-        addToCollidableObjects(gameObject);
+        addToCollidableObjects( gameObject );
     }
 
-    private void addToCollidableObjects(GameObject gameObject) {
-        if ((gameObject instanceof Player) ||
-                (gameObject instanceof Bullet) ||
-                (gameObject instanceof Asteroid)) {
+    private void addToCollidableObjects( GameObject gameObject ) {
+        if ( ( gameObject instanceof Player ) ||
+                ( gameObject instanceof Bullet ) ||
+                ( gameObject instanceof Asteroid ) ) {
 
-            mCollidableObjectsToAdd.add((ScreenGameObject) gameObject);
+            collidableObjectsToAdd.add( ( ScreenGameObject ) gameObject );
         }
-
     }
 
-    public void removeGameObject(ScreenGameObject gameObject) {
-        mObjectsToRemove.add(gameObject);
+    public void removeGameObject( ScreenGameObject gameObject ) {
+        gameObjectsToRemove.add( gameObject );
     }
 
-    public void onUpdate(long elapsedMillis) {
+    public void onUpdate( long elapsedMillis ) {
 
-        int numGameObjects = mGameObjects.size();
+        int numGameObjects = gameObjects.size();
 
-        for (int i = 0; i < numGameObjects; i++) {
-            mGameObjects.get(i).onUpdate(elapsedMillis, this);
-            mGameObjects.get(i).onPostUpdate(this);
+        for ( int i = 0; i < numGameObjects; i++ ) {
+            gameObjects.get( i ).onUpdate( elapsedMillis, this );
+            gameObjects.get( i ).onPostUpdate( this );
         }
 
         checkCollisions();
 
-        synchronized (mGameObjects) {
-            while (!mObjectsToRemove.isEmpty()) {
-                GameObject gameObjectToRemove = mObjectsToRemove.remove(0);
-                mGameObjects.remove(gameObjectToRemove);
-                mCollisionableObjects.remove(gameObjectToRemove);
+        synchronized ( gameObjects ) {
+            while ( !gameObjectsToRemove.isEmpty() ) {
+                GameObject gameObjectToRemove = gameObjectsToRemove.remove( 0 );
+                gameObjects.remove( gameObjectToRemove );
+                collidableObjects.remove( gameObjectToRemove );
             }
-            while (!mObjectsToAdd.isEmpty()) {
-                mGameObjects.add(mObjectsToAdd.remove(0));
-                mCollisionableObjects.add(mCollidableObjectsToAdd.remove(0));
+            while ( !gameObjectsToAdd.isEmpty() ) {
+                gameObjects.add( gameObjectsToAdd.remove( 0 ) );
+                collidableObjects.add( collidableObjectsToAdd.remove( 0 ) );
             }
         }
     }
 
-    public void onDraw() {
-        mGameView.draw();
+    public void onDraw( ) {
+        gameView.draw();
     }
 
-    public boolean isRunning() {
-        return mUpdateThread != null && mUpdateThread.isGameRunning();
+    public boolean isRunning( ) {
+        return updateThread != null && updateThread.isGameRunning();
     }
 
-    public boolean isPaused() {
-        return mUpdateThread != null && mUpdateThread.isGamePaused();
+    public boolean isPaused( ) {
+        return updateThread != null && updateThread.isGamePaused();
     }
 
-    public void setInputController(InputController controller) {
+    public void setInputController( InputController controller ) {
         inputController = controller;
     }
 
-    public Context getContext() {
-        return mGameView.getContext();
+    public Context getContext( ) {
+        return gameView.getContext();
     }
 
-    public void checkCollisions() {
+    public void checkCollisions( ) {
 
-        int numObjects = mCollisionableObjects.size();
-        for (int i = 0; i < numObjects; i++) {
-            ScreenGameObject screenGameObjectA = mCollisionableObjects.get(i);
-            for (int j = i + 1; j < numObjects; j++) {
-                ScreenGameObject screenGameObjectB = mCollisionableObjects.get(j);
-                if (screenGameObjectA instanceof Asteroid && screenGameObjectB instanceof Asteroid) {
+        int numObjects = collidableObjects.size();
+        for ( int i = 0; i < numObjects; i++ ) {
+            ScreenGameObject screenGameObjectA = collidableObjects.get( i );
+            for ( int j = i + 1; j < numObjects; j++ ) {
+                ScreenGameObject screenGameObjectB = collidableObjects.get( j );
+                if ( screenGameObjectA instanceof Asteroid && screenGameObjectB instanceof Asteroid ) {
                     continue;
                 }
-                if ((screenGameObjectA instanceof Bullet && screenGameObjectB instanceof Player) ||
-                        (screenGameObjectA instanceof Player && screenGameObjectB instanceof Bullet)) {
+                if ( ( screenGameObjectA instanceof Bullet && screenGameObjectB instanceof Player ) ||
+                        ( screenGameObjectA instanceof Player && screenGameObjectB instanceof Bullet ) ) {
                     continue;
                 }
-                if (screenGameObjectA.checkCollision(screenGameObjectB)) {
-                    screenGameObjectA.onCollision(this, screenGameObjectB);
+                if ( screenGameObjectA.checkCollision( screenGameObjectB ) ) {
+                    screenGameObjectA.onCollision( this, screenGameObjectB );
                 }
             }
         }

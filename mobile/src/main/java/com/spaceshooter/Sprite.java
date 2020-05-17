@@ -1,11 +1,8 @@
 package com.spaceshooter;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 
 public abstract class Sprite extends ScreenGameObject {
 
@@ -16,19 +13,15 @@ public abstract class Sprite extends ScreenGameObject {
     protected double speedX;
     protected double speedY;
 
-    protected Sprite(GameEngine gameEngine, int drawableRes) {
-        Resources r = gameEngine.getContext().getResources();
-        Drawable spriteDrawable = r.getDrawable(drawableRes);
-        pixelFactor = gameEngine.mPixelFactor;
-
-        height = spriteDrawable.getIntrinsicHeight();
-        width = spriteDrawable.getIntrinsicWidth();
-
-        bitmap = ((BitmapDrawable) spriteDrawable).getBitmap();
+    protected Sprite( Bitmap bitmap, GameUiParameters parameters ) {
+        this.bitmap = bitmap;
+        this.pixelFactor = parameters.getPixelFactor();
+        this.height = parameters.getDrawableHeight();
+        this.width = parameters.getDrawableWidth();
     }
 
     @Override
-    public void onDraw(Canvas canvas) {
+    public void onDraw( Canvas canvas ) {
         if ( xPosition > canvas.getWidth()
                 || yPosition > canvas.getHeight()
                 || xPosition < -width
@@ -37,10 +30,10 @@ public abstract class Sprite extends ScreenGameObject {
         }
 
         matrix.reset();
-        matrix.postScale((float) pixelFactor, (float) pixelFactor );
-        matrix.postTranslate((float) xPosition, (float) yPosition );
-        matrix.postRotate((float) rotation, (float) ( xPosition + width / 2), (float) ( yPosition + height / 2));
+        matrix.postScale( ( float ) pixelFactor, ( float ) pixelFactor );
+        matrix.postTranslate( ( float ) xPosition, ( float ) yPosition );
+        matrix.postRotate( ( float ) rotation, ( float ) ( xPosition + width / 2 ), ( float ) ( yPosition + height / 2 ) );
 
-        canvas.drawBitmap( bitmap, matrix, null);
+        canvas.drawBitmap( bitmap, matrix, null );
     }
 }

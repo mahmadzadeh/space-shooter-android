@@ -3,25 +3,25 @@ package com.spaceshooter;
 
 public class UpdateThread extends Thread {
 
-    private final GameEngine mGameEngine;
-    private boolean mGameIsRunning = true;
-    private boolean mPauseGame = false;
+    private final GameEngine gameEngine;
+    private boolean isGameRunning = true;
+    private boolean isGamePaused = false;
 
     private Object mLock = new Object();
 
     public UpdateThread(GameEngine gameEngine) {
-        mGameEngine = gameEngine;
+        this.gameEngine = gameEngine;
     }
 
     @Override
     public void start() {
-        mGameIsRunning = true;
-        mPauseGame = false;
+        isGameRunning = true;
+        isGamePaused = false;
         super.start();
     }
 
     public void stopGame() {
-        mGameIsRunning = false;
+        isGameRunning = false;
         resumeGame();
     }
 
@@ -32,11 +32,11 @@ public class UpdateThread extends Thread {
         long elapsedMillis;
         previousTimeMillis = System.currentTimeMillis();
 
-        while (mGameIsRunning) {
+        while ( isGameRunning ) {
             currentTimeMillis = System.currentTimeMillis();
             elapsedMillis = currentTimeMillis - previousTimeMillis;
-            if (mPauseGame) {
-                while (mPauseGame) {
+            if ( isGamePaused ) {
+                while ( isGamePaused ) {
                     try {
                         synchronized (mLock) {
                             mLock.wait();
@@ -47,18 +47,18 @@ public class UpdateThread extends Thread {
                 }
                 currentTimeMillis = System.currentTimeMillis();
             }
-            mGameEngine.onUpdate(elapsedMillis);
+            gameEngine.onUpdate(elapsedMillis);
             previousTimeMillis = currentTimeMillis;
         }
     }
 
     public void pauseGame() {
-        mPauseGame = true;
+        isGamePaused = true;
     }
 
     public void resumeGame() {
-        if (mPauseGame) {
-            mPauseGame = false;
+        if ( isGamePaused ) {
+            isGamePaused = false;
             synchronized (mLock) {
                 mLock.notify();
             }
@@ -66,10 +66,10 @@ public class UpdateThread extends Thread {
     }
 
     public boolean isGameRunning() {
-        return mGameIsRunning;
+        return isGameRunning;
     }
 
     public boolean isGamePaused() {
-        return mPauseGame;
+        return isGamePaused;
     }
 }

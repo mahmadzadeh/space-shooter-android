@@ -1,5 +1,6 @@
 package com.spaceshooter;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 import java.util.ArrayList;
@@ -17,37 +18,37 @@ public class AsteroidPool extends GameObject {
             0000, 15000, 20000
     };
 
-    public AsteroidPool( GameEngine gameEngine) {
-        for (int i = 0; i < 10; i++) {
-            mAsteroidPool.add(new Asteroid(this, gameEngine));
+    public AsteroidPool( Bitmap bitmap, GameUiParameters parameters ) {
+        for ( int i = 0; i < 10; i++ ) {
+            mAsteroidPool.add( new Asteroid( bitmap, parameters, this ) );
         }
     }
 
     @Override
-    public void startGame() {
+    public void startGame( ) {
         mCurrentMillis = 0;
         mEnemiesSpawned = 0;
     }
 
     @Override
-    public void onUpdate(long elapsedMillis, GameEngine gameEngine) {
+    public void onUpdate( long elapsedMillis, GameEngine gameEngine ) {
         mCurrentMillis += elapsedMillis;
         long waveTimestamp = mEnemiesSpawned * TIME_BETWEEN_ENEMIES; // - mWaveStartingTimestamp[i];
-        if (mCurrentMillis > waveTimestamp) {
-            Asteroid a = mAsteroidPool.remove(0);
-            a.init(gameEngine);
-            gameEngine.addGameObject(a);
+        if ( mCurrentMillis > waveTimestamp ) {
+            Asteroid a = mAsteroidPool.remove( 0 );
+            a.init( gameEngine );
+            gameEngine.addGameObject( a );
             mEnemiesSpawned++;
             return;
         }
     }
 
     @Override
-    public void onDraw(Canvas canvas) {
+    public void onDraw( Canvas canvas ) {
         // This game object does not draw anything
     }
 
-    public void returnToPool(Asteroid asteroid) {
-        mAsteroidPool.add(asteroid);
+    public void returnToPool( Asteroid asteroid ) {
+        mAsteroidPool.add( asteroid );
     }
 }

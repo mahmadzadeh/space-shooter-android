@@ -1,14 +1,17 @@
 package com.spaceshooter;
 
 
+import android.graphics.Bitmap;
+
 public class Bullet extends Sprite {
-    private double mSpeedFactor;
+    private double speedFactor;
 
-    private Player mParent;
+    private Player player;
 
-    public Bullet(GameEngine gameEngine) {
-        super(gameEngine, R.drawable.bullet);
-        mSpeedFactor = gameEngine.mPixelFactor * -300d / 1000d;
+    public Bullet( Bitmap bitmap, GameUiParameters parameters) {
+        super(bitmap, parameters );
+
+        speedFactor = parameters.getPixelFactor() * -300d / 1000d;
     }
 
     @Override
@@ -18,17 +21,17 @@ public class Bullet extends Sprite {
 
     @Override
     public void onUpdate(long elapsedMillis, GameEngine gameEngine) {
-        yPosition += mSpeedFactor * elapsedMillis;
+        yPosition += speedFactor * elapsedMillis;
         if ( yPosition < -height ) {
             gameEngine.removeGameObject(this);
-            mParent.releaseBullet(this);
+            player.releaseBullet(this);
         }
     }
 
     public void init(Player parent, double positionX, double positionY) {
         xPosition = positionX - width / 2;
         yPosition = positionY - height / 2;
-        mParent = parent;
+        player = parent;
     }
 
     public void onCollision(GameEngine gameEngine, ScreenGameObject otherObject) {
@@ -41,7 +44,7 @@ public class Bullet extends Sprite {
 
     public void removeObject(GameEngine gameEngine) {
         gameEngine.removeGameObject(this);
-        mParent.releaseBullet(this);
+        player.releaseBullet(this);
     }
 
 }

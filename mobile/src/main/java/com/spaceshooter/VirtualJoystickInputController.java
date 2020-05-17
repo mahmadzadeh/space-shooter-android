@@ -6,17 +6,17 @@ import android.view.View;
 
 public class VirtualJoystickInputController extends InputController {
 
-    private float mStartingPositionX;
-    private float mStartingPositionY;
+    private float startingPositionX;
+    private float startingPositionY;
 
-    private final double mMaxDistance;
+    private final double maxDistance;
 
     public VirtualJoystickInputController(View view) {
         view.findViewById(R.id.vjoystick_main).setOnTouchListener(new VJoystickTouchListener());
         view.findViewById(R.id.vjoystick_touch).setOnTouchListener(new VFireButtonTouchListener());
 
         double pixelFactor = view.getHeight() / 400d;
-        mMaxDistance = 50 * pixelFactor;
+        maxDistance = 50 * pixelFactor;
     }
 
 
@@ -25,24 +25,24 @@ public class VirtualJoystickInputController extends InputController {
         public boolean onTouch(View v, MotionEvent event) {
             int action = event.getActionMasked();
             if (action == MotionEvent.ACTION_DOWN) {
-                mStartingPositionX = event.getX(0);
-                mStartingPositionY = event.getY(0);
+                startingPositionX = event.getX(0);
+                startingPositionY = event.getY(0);
             } else if (action == MotionEvent.ACTION_UP) {
-                mHorizontalFactor = 0;
-                mVerticalFactor = 0;
+                horizontalFactor = 0;
+                verticalFactor = 0;
             } else if (action == MotionEvent.ACTION_MOVE) {
                 // Get the proportion to the max
-                mHorizontalFactor = (event.getX(0) - mStartingPositionX) / mMaxDistance;
-                if (mHorizontalFactor > 1) {
-                    mHorizontalFactor = 1;
-                } else if (mHorizontalFactor < -1) {
-                    mHorizontalFactor = -1;
+                horizontalFactor = (event.getX(0) - startingPositionX ) / maxDistance;
+                if ( horizontalFactor > 1) {
+                    horizontalFactor = 1;
+                } else if ( horizontalFactor < -1) {
+                    horizontalFactor = -1;
                 }
-                mVerticalFactor = (event.getY(0) - mStartingPositionY) / mMaxDistance;
-                if (mVerticalFactor > 1) {
-                    mVerticalFactor = 1;
-                } else if (mVerticalFactor < -1) {
-                    mVerticalFactor = -1;
+                verticalFactor = (event.getY(0) - startingPositionY ) / maxDistance;
+                if ( verticalFactor > 1) {
+                    verticalFactor = 1;
+                } else if ( verticalFactor < -1) {
+                    verticalFactor = -1;
                 }
             }
             return true;
@@ -54,9 +54,9 @@ public class VirtualJoystickInputController extends InputController {
         public boolean onTouch(View v, MotionEvent event) {
             int action = event.getActionMasked();
             if (action == MotionEvent.ACTION_DOWN) {
-                mIsFiring = true;
+                isFiring = true;
             } else if (action == MotionEvent.ACTION_UP) {
-                mIsFiring = false;
+                isFiring = false;
             }
             return true;
         }

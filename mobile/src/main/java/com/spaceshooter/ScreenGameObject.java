@@ -15,10 +15,6 @@ public abstract class ScreenGameObject extends GameObject {
         return checkRectangularCollision(gameObject);
     }
 
-    private boolean checkRectangularCollision(ScreenGameObject other) {
-        return Rect.intersects( boundingRect, other.boundingRect );
-    }
-
     public void onCollision(GameEngine gameEngine, ScreenGameObject sgo) {
     }
 
@@ -32,5 +28,9 @@ public abstract class ScreenGameObject extends GameObject {
 
     public String toString() {
         return this.getClass().getSimpleName();
+    }
+
+    private boolean checkRectangularCollision(ScreenGameObject other) {
+        return Rect.intersects( boundingRect, other.boundingRect );
     }
 }

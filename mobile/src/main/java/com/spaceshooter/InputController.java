@@ -2,10 +2,9 @@ package com.spaceshooter;
 
 public class InputController {
 
-    public double mHorizontalFactor;
-    public double mVerticalFactor;
-
-    public boolean mIsFiring;
+    public double horizontalFactor;
+    public double verticalFactor;
+    public boolean isFiring;
 
     public void onStart() {
     }

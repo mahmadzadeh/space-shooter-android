@@ -6,49 +6,49 @@ import android.graphics.Paint;
 
 public class FPSCounter extends GameObject {
 
-    private final double mPixelFactor;
-    private final float mTextWidth;
-    private final float mTextHeight;
+    private final double pixelFactor;
+    private final float textWidth;
+    private final float textHeight;
 
-    private Paint mPaint;
-    private long mTotalMillis;
-    private int mDraws;
-    private float mFps;
+    private Paint paint;
+    private long totalMillis;
+    private int draws;
+    private float fps;
 
-    private String mFpsText = "";
+    private String fpsText = "";
 
     public FPSCounter(GameEngine gameEngine) {
-        mPaint = new Paint();
-        mPaint.setTextAlign(Paint.Align.CENTER);
-        mTextHeight = (float) (25 * gameEngine.mPixelFactor);
-        mTextWidth = (float) (50 * gameEngine.mPixelFactor);
-        mPaint.setTextSize(mTextHeight / 2);
-        mPixelFactor = gameEngine.mPixelFactor;
+        paint = new Paint();
+        paint.setTextAlign(Paint.Align.CENTER);
+        textHeight = (float) (25 * gameEngine.pixelFactor );
+        textWidth = (float) (50 * gameEngine.pixelFactor );
+        paint.setTextSize( textHeight / 2);
+        pixelFactor = gameEngine.pixelFactor;
     }
 
     @Override
     public void startGame() {
-        mTotalMillis = 0;
+        totalMillis = 0;
     }
 
     @Override
     public void onUpdate(long elapsedMillis, GameEngine gameEngine) {
-        mTotalMillis += elapsedMillis;
-        if (mTotalMillis > 1000) {
-            mFps = mDraws * 1000 / mTotalMillis;
-            mFpsText = mFps + " fps";
-            mTotalMillis = 0;
-            mDraws = 0;
+        totalMillis += elapsedMillis;
+        if ( totalMillis > 1000) {
+            fps = draws * 1000 / totalMillis;
+            fpsText = fps + " fps";
+            totalMillis = 0;
+            draws = 0;
         }
     }
 
     @Override
     public void onDraw(Canvas canvas) {
-        mPaint.setColor(Color.BLACK);
-        canvas.drawRect(0, (int) (canvas.getHeight() - mTextHeight), mTextWidth, canvas.getHeight(), mPaint);
-        mPaint.setColor(Color.WHITE);
-        canvas.drawText(mFpsText, mTextWidth / 2, (int) (canvas.getHeight() - mTextHeight / 2), mPaint);
-        mDraws++;
+        paint.setColor(Color.BLACK);
+        canvas.drawRect(0, (int) (canvas.getHeight() - textHeight ), textWidth, canvas.getHeight(), paint );
+        paint.setColor(Color.WHITE);
+        canvas.drawText( fpsText, textWidth / 2, (int) (canvas.getHeight() - textHeight / 2), paint );
+        draws++;
     }
 
 }

@@ -1,75 +1,72 @@
 package com.spaceshooter;
 
+import android.graphics.Bitmap;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends Sprite {
     private static final long TIME_BETWEEN_BULLETS = 250;
-    private static final int INITIAL_BULLET_POOL_AMOUNT = 6;
 
-    private List<Bullet> bullets = new ArrayList<>();
+    private List<Bullet> bullets;
 
-    private int mMaxX;
-    private int mMaxY;
-    private double mSpeedFactor;
-    private long mTimeSinceLastFire;
+    private int maxX;
+    private int maxY;
+    private double speedFactor;
+    private long timeSinceLastFire;
 
-    public Player(GameEngine gameEngine) {
-        super(gameEngine, R.drawable.ship);
-        mSpeedFactor = pixelFactor * 100d / 1000d;
+    public Player( Bitmap bitmap, List<Bullet> bullets, GameUiParameters parameters ) {
+        super(  bitmap, parameters );
+        this.speedFactor = parameters .getPixelFactor() * 100d / 1000d;
 
-        mMaxX = gameEngine.mWidth - width;
-        mMaxY = gameEngine.mHeight - height;
-
-        initBulletPool(gameEngine);
+        this.maxX = parameters.getGameEngineDimension().getGameEngineWidth() - width;
+        this.maxY = parameters.getGameEngineDimension().getGameEngineHeight() - height;
+        this.bullets = bullets;
     }
 
-    private void initBulletPool(GameEngine gameEngine) {
-        for (int i = 0; i < INITIAL_BULLET_POOL_AMOUNT; i++) {
-            bullets.add(new Bullet(gameEngine));
-        }
-    }
 
     @Override
     public void startGame() {
-        xPosition = mMaxX / 2;
-        yPosition = mMaxY / 2;
+        xPosition = maxX / 2;
+        yPosition = maxY / 2;
     }
 
     @Override
     public void onUpdate(long elapsedTime, GameEngine gameEngine) {
+
         updatePosition(elapsedTime, gameEngine.inputController);
+
         checkFiring(elapsedTime, gameEngine);
     }
 
     private void checkFiring(long elapsedMillis, GameEngine gameEngine) {
-        if (gameEngine.inputController.mIsFiring && mTimeSinceLastFire > TIME_BETWEEN_BULLETS) {
+        if (gameEngine.inputController.isFiring && timeSinceLastFire > TIME_BETWEEN_BULLETS) {
             Bullet b = getBullet();
             if (b == null) {
                 return;
             }
             b.init(this, xPosition + width / 2, yPosition );
             gameEngine.addGameObject(b);
-            mTimeSinceLastFire = 0;
+            timeSinceLastFire = 0;
         } else {
-            mTimeSinceLastFire += elapsedMillis;
+            timeSinceLastFire += elapsedMillis;
         }
     }
 
     private void updatePosition(long elapsedTime, InputController inputController) {
-        xPosition += mSpeedFactor * inputController.mHorizontalFactor * elapsedTime;
+        xPosition += speedFactor * inputController.horizontalFactor * elapsedTime;
         if ( xPosition < 0) {
             xPosition = 0;
         }
-        if ( xPosition > mMaxX) {
-            xPosition = mMaxX;
+        if ( xPosition > maxX ) {
+            xPosition = maxX;
         }
-        yPosition += mSpeedFactor * inputController.mVerticalFactor * elapsedTime;
+        yPosition += speedFactor * inputController.verticalFactor * elapsedTime;
         if ( yPosition < 0) {
             yPosition = 0;
         }
-        if ( yPosition > mMaxY) {
-            yPosition = mMaxY;
+        if ( yPosition > maxY ) {
+            yPosition = maxY;
         }
     }
 
