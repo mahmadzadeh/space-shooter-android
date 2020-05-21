@@ -10,6 +10,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.Collections;
+
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.when;
 
@@ -38,7 +40,10 @@ public class ScreenGameObjectTest {
     @Test
     public void checkCollision_whenTwoGameObjectsNotCollided_thenReturnFalse( ) {
 
-        ScreenGameObject gameObject_1 = new Bullet( mockBitMap, mockGameParams);
+        ScreenGameObject bullet = new Bullet( mockBitMap, mockGameParams);
+        ScreenGameObject player = new Player( mockBitMap, Collections.EMPTY_LIST, mockGameParams);
+
+        //player.
     }
 
 

@@ -2,19 +2,31 @@ package com.spaceshooter;
 
 public class InputController {
 
-    public double horizontalFactor;
-    public double verticalFactor;
-    public boolean isFiring;
+    private double horizontalFactor;
 
-    public void onStart() {
+    private double verticalFactor;
+    private boolean isFiring;
+    public double getHorizontalFactor( ) {
+        return horizontalFactor;
     }
 
-    public void onStop() {
+    public double getVerticalFactor( ) {
+        return verticalFactor;
     }
 
-    public void onPause() {
+    public boolean isFiring( ) {
+        return isFiring;
     }
 
-    public void onResume() {
+    public void setHorizontalFactor( double horizontalFactor ) {
+        this.horizontalFactor = horizontalFactor;
+    }
+
+    public void setVerticalFactor( double verticalFactor ) {
+        this.verticalFactor = verticalFactor;
+    }
+
+    public void setFiring( boolean firing ) {
+        isFiring = firing;
     }
 }

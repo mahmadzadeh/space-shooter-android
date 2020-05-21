@@ -7,7 +7,7 @@ public class UpdateThread extends Thread {
     private boolean isGameRunning = true;
     private boolean isGamePaused = false;
 
-    private Object mLock = new Object();
+    private Object lock = new Object();
 
     public UpdateThread(GameEngine gameEngine) {
         this.gameEngine = gameEngine;
@@ -38,8 +38,8 @@ public class UpdateThread extends Thread {
             if ( isGamePaused ) {
                 while ( isGamePaused ) {
                     try {
-                        synchronized (mLock) {
-                            mLock.wait();
+                        synchronized ( lock ) {
+                            lock.wait();
                         }
                     } catch (InterruptedException e) {
                         // We stay on the loop
@@ -59,8 +59,8 @@ public class UpdateThread extends Thread {
     public void resumeGame() {
         if ( isGamePaused ) {
             isGamePaused = false;
-            synchronized (mLock) {
-                mLock.notify();
+            synchronized ( lock ) {
+                lock.notify();
             }
         }
     }

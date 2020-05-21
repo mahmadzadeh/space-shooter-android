@@ -1,8 +1,20 @@
 package com.spaceshooter;
 
+import android.graphics.Bitmap;
+
 import org.junit.Test;
+import org.mockito.Mock;
 
 public class AsteroidTest {
+
+    @Mock
+    private Bitmap mockBitmap;
+
+    @Mock
+    private GameUiParameters mockParams;
+
+    @Mock
+    private AsteroidPool mockAsteroidPool;
 
     @Test
     public void getAngle( ) {
@@ -17,4 +29,10 @@ public class AsteroidTest {
 
             }
     }
+
+    @Test
+    public void test() {
+        Asteroid asteroid  = new Asteroid(mockBitmap, mockParams, mockAsteroidPool );
+    }
+
 }

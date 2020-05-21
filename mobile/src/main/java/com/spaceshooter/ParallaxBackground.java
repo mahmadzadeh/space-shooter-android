@@ -23,7 +23,6 @@ public class ParallaxBackground extends GameObject {
     private final double pixelFactor;
     private final double targetWidth;
     protected double positionY;
-    private Paint paint = new Paint();
 
     public ParallaxBackground( Bitmap backgroundBitmap, int speed, GameUiParameters parameters) {
 
@@ -41,9 +40,6 @@ public class ParallaxBackground extends GameObject {
         this.targetWidth = Math.min( imageWidth, screenWidth );
     }
 
-    @Override
-    public void startGame( ) {
-    }
 
     @Override
     public void onUpdate( long elapsedMillis, GameEngine gameEngine ) {
@@ -53,6 +49,20 @@ public class ParallaxBackground extends GameObject {
     @Override
     public void onDraw( Canvas canvas ) {
         efficientDraw( canvas );
+    }
+
+    @Override
+    public void startGame( ) {
+        return; // do nothing
+    }
+
+    /**
+     * since background image does not have a bounding box there is nothing to update after
+     * position change.
+     */
+    @Override
+    public void onPostUpdate( ) {
+        return;//do nothing
     }
 
     private void efficientDraw( Canvas canvas ) {

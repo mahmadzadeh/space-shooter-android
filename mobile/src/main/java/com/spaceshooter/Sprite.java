@@ -3,18 +3,23 @@ package com.spaceshooter;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Rect;
 
 public abstract class Sprite extends ScreenGameObject {
 
     protected final double pixelFactor;
-    private final Bitmap bitmap;
-    private final Matrix matrix = new Matrix();
     protected double rotation;
     protected double speedX;
     protected double speedY;
 
+    private final Bitmap bitmap;
+    private final Matrix matrix = new Matrix();
+
     protected Sprite( Bitmap bitmap, GameUiParameters parameters ) {
+        super( new Rect( -1, -1, -1, -1 ) );
+
         this.bitmap = bitmap;
+
         this.pixelFactor = parameters.getPixelFactor();
         this.height = parameters.getDrawableHeight();
         this.width = parameters.getDrawableWidth();
@@ -26,6 +31,7 @@ public abstract class Sprite extends ScreenGameObject {
                 || yPosition > canvas.getHeight()
                 || xPosition < -width
                 || yPosition < -height ) {
+
             return;
         }
 

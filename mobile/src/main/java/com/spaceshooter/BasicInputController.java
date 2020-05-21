@@ -20,29 +20,30 @@ public class BasicInputController extends InputController implements View.OnTouc
         if (action == MotionEvent.ACTION_DOWN) {
             // User started pressing a key
             if (id == R.id.keypad_up) {
-                verticalFactor -= 1;
+                setVerticalFactor( getVerticalFactor() - 1);
             } else if (id == R.id.keypad_down) {
-                verticalFactor += 1;
+                setVerticalFactor( getVerticalFactor() + 1);
             } else if (id == R.id.keypad_left) {
-                horizontalFactor -= 1;
+                setHorizontalFactor(getHorizontalFactor() - 1);
             } else if (id == R.id.keypad_right) {
-                horizontalFactor += 1;
+                setHorizontalFactor(getHorizontalFactor() + 1);
             } else if (id == R.id.keypad_fire) {
-                isFiring = true;
+                setFiring( true );
             }
         } else if (action == MotionEvent.ACTION_UP) {
             if (id == R.id.keypad_up) {
-                verticalFactor += 1;
+                setVerticalFactor( getVerticalFactor() + 1);
             } else if (id == R.id.keypad_down) {
-                verticalFactor -= 1;
+                setVerticalFactor( getVerticalFactor() - 1);
             } else if (id == R.id.keypad_left) {
-                horizontalFactor += 1;
+                setHorizontalFactor(getHorizontalFactor() + 1);
             } else if (id == R.id.keypad_right) {
-                horizontalFactor -= 1;
+                setHorizontalFactor(getHorizontalFactor() - 1);
             } else if (id == R.id.keypad_fire) {
-                isFiring = false;
+                setFiring( false);
             }
         }
         return false;
     }
+
 }

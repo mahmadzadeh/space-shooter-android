@@ -2,6 +2,7 @@ package com.spaceshooter;
 
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,7 +109,7 @@ public class GameEngine {
 
         for ( int i = 0; i < numGameObjects; i++ ) {
             gameObjects.get( i ).onUpdate( elapsedMillis, this );
-            gameObjects.get( i ).onPostUpdate( this );
+            gameObjects.get( i ).onPostUpdate();
         }
 
         checkCollisions();
@@ -161,6 +162,7 @@ public class GameEngine {
                     continue;
                 }
                 if ( screenGameObjectA.checkCollision( screenGameObjectB ) ) {
+                    Log.e( "collided objects", "checkCollisions: screenGameObjectA"+screenGameObjectA.toString() + " screenGameObjectB " + screenGameObjectB.toString() );
                     screenGameObjectA.onCollision( this, screenGameObjectB );
                 }
             }

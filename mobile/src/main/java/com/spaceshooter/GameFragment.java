@@ -19,6 +19,7 @@ import java.util.List;
 
 public class GameFragment extends SpaceShooterBaseFragment implements View.OnClickListener {
 
+    public static final int POOL_SIZE = 10;
     private GameEngine gameEngine;
 
     public GameFragment( ) {
@@ -147,7 +148,7 @@ public class GameFragment extends SpaceShooterBaseFragment implements View.OnCli
         GameUiParameters parameters = new GameUiParameters( gameEngineDimension, gameEngine.pixelFactor,
                 drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight() );
 
-        return new AsteroidPool( backgroundBitmap, parameters );
+        return new AsteroidPool( backgroundBitmap, parameters, POOL_SIZE );
     }
 
     private Player getPlayerGameObject( ) {

@@ -2,7 +2,6 @@ package com.spaceshooter;
 
 import android.graphics.Bitmap;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends Sprite {
@@ -40,7 +39,7 @@ public class Player extends Sprite {
     }
 
     private void checkFiring(long elapsedMillis, GameEngine gameEngine) {
-        if (gameEngine.inputController.isFiring && timeSinceLastFire > TIME_BETWEEN_BULLETS) {
+        if ( gameEngine.inputController.isFiring() && timeSinceLastFire > TIME_BETWEEN_BULLETS) {
             Bullet b = getBullet();
             if (b == null) {
                 return;
@@ -54,14 +53,14 @@ public class Player extends Sprite {
     }
 
     private void updatePosition(long elapsedTime, InputController inputController) {
-        xPosition += speedFactor * inputController.horizontalFactor * elapsedTime;
+        xPosition += speedFactor * inputController.getHorizontalFactor() * elapsedTime;
         if ( xPosition < 0) {
             xPosition = 0;
         }
         if ( xPosition > maxX ) {
             xPosition = maxX;
         }
-        yPosition += speedFactor * inputController.verticalFactor * elapsedTime;
+        yPosition += speedFactor * inputController.getVerticalFactor() * elapsedTime;
         if ( yPosition < 0) {
             yPosition = 0;
         }

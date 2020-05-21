@@ -51,4 +51,9 @@ public class FPSCounter extends GameObject {
         draws++;
     }
 
+    @Override
+    public void onPostUpdate( ) {
+        return;
+    }
+
 }
