@@ -35,13 +35,13 @@ public class VirtualJoystickInputController extends InputController {
                 if ( getHorizontalFactor() > 1 ) {
                     setHorizontalFactor( 1 );
                 } else if ( getHorizontalFactor() < -1 ) {
-                    setHorizontalFactor( -1);
+                    setHorizontalFactor( -1 );
                 }
-                setVerticalFactor(( event.getY( 0 ) - startingPositionY ) / maxDistance);
+                setVerticalFactor( ( event.getY( 0 ) - startingPositionY ) / maxDistance );
                 if ( getVerticalFactor() > 1 ) {
-                    setVerticalFactor(1);
+                    setVerticalFactor( 1 );
                 } else if ( getVerticalFactor() < -1 ) {
-                    setVerticalFactor( -1);
+                    setVerticalFactor( -1 );
                 }
             }
             return true;
@@ -53,9 +53,9 @@ public class VirtualJoystickInputController extends InputController {
         public boolean onTouch( View v, MotionEvent event ) {
             int action = event.getActionMasked();
             if ( action == MotionEvent.ACTION_DOWN ) {
-                setFiring( true);
+                setFiring( true );
             } else if ( action == MotionEvent.ACTION_UP ) {
-                setFiring( false);
+                setFiring( false );
             }
             return true;
         }

@@ -29,8 +29,10 @@ public class Asteroid extends Sprite {
 
     @Override
     public void onUpdate( long elapsedMillis, GameEngine gameEngine ) {
-        xPosition += speedX * elapsedMillis;
-        yPosition += speedY * elapsedMillis;
+        position.update( position.getX() + speedX * elapsedMillis, position.getY() + speedY * elapsedMillis );
+
+//        xPosition += speedX * elapsedMillis;
+//        yPosition += speedY * elapsedMillis;
 
         rotation += rotationSpeed * elapsedMillis;
         if ( rotation > 360 ) {
@@ -50,8 +52,7 @@ public class Asteroid extends Sprite {
         speedX = speed * Math.sin( angle );
         speedY = speed * Math.cos( angle );
 
-        xPosition = gameEngine.random.nextInt( gameEngine.width / 2 ) + gameEngine.width / 4;
-        yPosition = -height;
+        position.update( gameEngine.random.nextInt( gameEngine.width / 2 ) + gameEngine.width / 4, -height  );
 
         rotationSpeed = angle * ( 180d / Math.PI ) / 250d; // They rotate 4 times their ange in a second.
         rotation = gameEngine.random.nextInt( 360 );
@@ -76,7 +77,7 @@ public class Asteroid extends Sprite {
     }
 
     private boolean isOutsideScreen( GameEngine gameEngine ) {
-        return yPosition > gameEngine.height;
+        return position.getY() > gameEngine.height;
     }
 
 }

@@ -3,9 +3,9 @@ package com.spaceshooter;
 public class InputController {
 
     private double horizontalFactor;
-
     private double verticalFactor;
     private boolean isFiring;
+
     public double getHorizontalFactor( ) {
         return horizontalFactor;
     }

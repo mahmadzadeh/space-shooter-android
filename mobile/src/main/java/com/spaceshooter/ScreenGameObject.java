@@ -6,15 +6,14 @@ import android.graphics.Rect;
 public abstract class ScreenGameObject extends GameObject {
 
     private final Rect boundingRect;
-
-    protected double xPosition;
-    protected double yPosition;
+    protected final Position position;
 
     protected int height;
     protected int width;
 
     protected ScreenGameObject( Rect boundingRect ) {
         this.boundingRect = boundingRect;
+        this.position = new Position( boundingRect.left, boundingRect.top );
     }
 
     public boolean checkCollision( ScreenGameObject gameObject ) {
@@ -25,7 +24,7 @@ public abstract class ScreenGameObject extends GameObject {
     }
 
     public void onPostUpdate( ) {
-        boundingRect.set( ( int ) xPosition, ( int ) yPosition, ( int ) xPosition + width, ( int ) yPosition + height );
+        boundingRect.set( ( int ) position.getY(), ( int ) position.getY(), ( int ) position.getY() + width, ( int ) position.getY() + height );
     }
 
     public Rect getBoundingRect( ) {
@@ -34,12 +33,11 @@ public abstract class ScreenGameObject extends GameObject {
 
     @Override
     public String toString( ) {
-        return "ScreenGameObject {" +
-                "xPosition=" + xPosition +
-                ", yPosition=" + yPosition +
+        return "ScreenGameObject{" +
+                "boundingRect=" + boundingRect +
+                ", position=" + position +
                 ", height=" + height +
                 ", width=" + width +
-                ", boundingRect=" + boundingRect +
                 '}';
     }
 

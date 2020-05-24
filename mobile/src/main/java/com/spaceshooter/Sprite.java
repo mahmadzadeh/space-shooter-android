@@ -27,18 +27,18 @@ public abstract class Sprite extends ScreenGameObject {
 
     @Override
     public void onDraw( Canvas canvas ) {
-        if ( xPosition > canvas.getWidth()
-                || yPosition > canvas.getHeight()
-                || xPosition < -width
-                || yPosition < -height ) {
+        if ( position.getX() > canvas.getWidth()
+                || position.getY() > canvas.getHeight()
+                || position.getX()  < -width
+                || position.getY() < -height ) {
 
             return;
         }
 
         matrix.reset();
         matrix.postScale( ( float ) pixelFactor, ( float ) pixelFactor );
-        matrix.postTranslate( ( float ) xPosition, ( float ) yPosition );
-        matrix.postRotate( ( float ) rotation, ( float ) ( xPosition + width / 2 ), ( float ) ( yPosition + height / 2 ) );
+        matrix.postTranslate( ( float ) position.getX(), ( float ) position.getY() );
+        matrix.postRotate( ( float ) rotation, ( float ) ( position.getX() + width / 2 ), ( float ) ( position.getY() + height / 2 ) );
 
         canvas.drawBitmap( bitmap, matrix, null );
     }

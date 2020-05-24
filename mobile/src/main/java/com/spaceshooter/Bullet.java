@@ -20,16 +20,16 @@ public class Bullet extends Sprite {
 
     @Override
     public void onUpdate( long elapsedMillis, GameEngine gameEngine ) {
-        yPosition += speedFactor * elapsedMillis;
-        if ( yPosition < -height ) {
+        position.update( position.getX(), position.getY() + ( speedFactor * elapsedMillis ) );
+
+        if ( position.getY() < -height ) {
             gameEngine.removeGameObject( this );
             player.releaseBullet( this );
         }
     }
 
     public void init( Player parent, double positionX, double positionY ) {
-        xPosition = positionX - width / 2;
-        yPosition = positionY - height / 2;
+        position.update( positionX - ( width / 2 ), positionY - ( height / 2 ) );
         player = parent;
     }
 

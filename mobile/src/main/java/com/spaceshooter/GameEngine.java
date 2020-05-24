@@ -162,7 +162,7 @@ public class GameEngine {
                     continue;
                 }
                 if ( screenGameObjectA.checkCollision( screenGameObjectB ) ) {
-                    Log.e( "collided objects", "checkCollisions: screenGameObjectA"+screenGameObjectA.toString() + " screenGameObjectB " + screenGameObjectB.toString() );
+                    //Log.e( "collided objects", "checkCollisions: screenGameObjectA"+screenGameObjectA.toString() + " screenGameObjectB " + screenGameObjectB.toString() );
                     screenGameObjectA.onCollision( this, screenGameObjectB );
                 }
             }
